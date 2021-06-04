@@ -1,0 +1,22 @@
+.app{
+    margin: 20px;
+    padding: 20px;
+    justify-content: center;
+    box-shadow: 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.icon{
+    display: flex;
+    flex-direction: column;
+}
+
+.text{
+    color: #02706B;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.icon.class>.MuiSvgIconRoot {
+    color: #02706B;
+
+}
