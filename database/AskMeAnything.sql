@@ -1,15 +1,41 @@
-CREATE DATABASE AskMeAnything;
+CREATE SCHEMA IF NOT EXISTS AskMeAnythingDB;
+USE AskMeAnythingDB;
 
---\c AskMeAnything;
-
-CREATE TABLE user_table (
-    id  SERIAL PRIMARY KEY,
-    first_name  VARCHAR(30),
-    last_name   VARCHAR(30),
-    username    VARCHAR(50),
-    password    VARCHAR(100)
+CREATE TABLE user (
+	username VARCHAR(20),
+    password VARCHAR(100),
+    PRIMARY KEY(username)
 );
 
+CREATE TABLE keyword (
+	keyword_id INT AUTO_INCREMENT,
+    keyword_title VARCHAR(20),
+    PRIMARY KEY(keyword_id)
+);
 
+CREATE TABLE question (
+	question_id INT AUTO_INCREMENT,
+    question_title VARCHAR(200),
+    question_text VARCHAR(1000),
+    date_asked DATETIME,
+    keyword_id INT,
+    FOREIGN KEY(keyword_id) REFERENCES keyword(keyword_id),
+    PRIMARY KEY(question_id)
+);
 
+CREATE TABLE has_keyword (
+	question_id INT,
+    keyword_id INT,
+    PRIMARY KEY(question_id, keyword_id),
+    FOREIGN KEY(question_id) REFERENCES question(question_id),
+    FOREIGN KEY(keyword_id) REFERENCES keyword(keyword_id)
+);
 
+CREATE TABLE answer (
+	answer_id INT AUTO_INCREMENT,
+    answer_text VARCHAR(10000),
+    question_id INT,
+    date_posted DATETIME,
+    PRIMARY KEY(question_id, answer_id),
+    FOREIGN KEY(question_id) REFERENCES question(question_id)
+);
