@@ -36,6 +36,6 @@ CREATE TABLE answer (
     answer_text VARCHAR(10000),
     question_id INT,
     date_posted DATETIME,
-    PRIMARY KEY(question_id, answer_id),
+    PRIMARY KEY(answer_id, question_id),
     FOREIGN KEY(question_id) REFERENCES question(question_id)
 );
