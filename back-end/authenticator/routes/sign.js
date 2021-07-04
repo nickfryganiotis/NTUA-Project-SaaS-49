@@ -5,6 +5,7 @@ const passport = require( 'passport' );
 const LocalStrategy = require( 'passport-local' ).Strategy;
 
 const jwt = require( 'jsonwebtoken' );
+const axios = require( 'axios' );
 //const JWTStrategy = require( 'passport-jwt' ).Strategy;
 //const ExtractJWT = require( 'passport-jwt' ).ExtractJwt;
 
@@ -20,26 +21,58 @@ passport.use( 'sign-in' , new LocalStrategy( ( username , password , done ) => {
 
         /* Data layer returns the array result. If this array is empty, then this user doesn't exist.
         */
-        let result = [2];
+        const options = {
+            method: "post",
+            url: "http://localhost:3003/authenticate",
+            data: {
+                username: username,
+                password: password
+            }
+        };
+        axios(options).then( (res) => {
+            console.log(res);
+            const result = res.data;
+            if( result === [] ) {
+                return done( null , false );
+            }
+            else {
+                return done( null , result[0] );
+            }
+        }).catch( (error ) => {
+            console.log(error)
+        });
 
         /* Missing code for the request on the data layer
         */
-        if( result === [] ) {
-            return done( null , false );
-        }
-        else {
-            return done( null , result[0] );
-        }
+
     })
 );
 
-router.post( '/sign_in' , passport.authenticate( 'sign-in' , {session: false } ) , function( req , res ) {
+router.post( '/sign_in' , passport.authenticate( 'sign-in' , {session: false } ) , ( req , res ) => {
     res.json( {
         user: req.user,
         timestamp : Date.now()
     } );
 } )
 
+router.post( '/sign_up' , ( req , res ) => {
+    const user = req.body;
+
+    const options = {
+        method: "post",
+        url: "http://localhost:3003/add_user",
+        data: user
+    };
+
+    axios(options).then( (in_res) => {
+        console.log(in_res.data);
+        res.send(in_res.data);
+    }).catch( (error ) => {
+        console.log(error)
+    });
+
+
+} );
 
 module.exports = router;
 

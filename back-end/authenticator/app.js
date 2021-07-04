@@ -16,7 +16,7 @@ app.use( passport.initialize() );
 app.use( '/' , signRouter );
 
 
-const PORT = 3004;
+const PORT = 3002;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 // catch 404 and forward to error handler
 // catch 404 and forward to error handler

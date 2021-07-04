@@ -3,7 +3,7 @@ const express = require( 'express' );
 const cookieParser = require( 'cookie-parser' );
 const logger = require( 'morgan' );
 const authRouter = require( './routes/authenticate' );
-
+const addUserRouter = require( './routes/add-user' );
 
 let app = express();
 
@@ -12,8 +12,9 @@ app.use( express.json() );
 app.use( express.urlencoded( { extended: false } ) );
 app.use( cookieParser() );
 
+//import routers
 app.use( '/' , authRouter );
-
+app.use( '/add_user' , addUserRouter );
 
 const PORT = 3003;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
