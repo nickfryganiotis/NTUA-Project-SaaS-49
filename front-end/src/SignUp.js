@@ -1,55 +1,68 @@
-import React from 'react';
-import {Divider, TextField, Button, FormControlLabel, Checkbox } from '@material-ui/core';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const SignUp = () => {
-    return (
+export default function SignUp() {
+  const [user, setUser] = useState({});
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    setUser({ ...user, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (user.hasOwnProperty("password") && user.hasOwnProperty("re-password")) {
+      if (user["password"] === user["re-password"]) {
+        console.log(user);
+      } else {
+        alert("Passwords must match!");
+      }
+    }
+    console.log(user);
+  };
+
+  const handleCancel = (e) => {
+    e.preventDefault();
+  };
+
+  return (
+    <div>
+      <h2>Sign Up</h2>
+      <form onSubmit={handleSubmit}>
         <div>
-            <div className="icon">
-                <div className="icon_class">
-                    <PersonAddIcon fontSize="large"/>
-                </div>
-                <div className="text">Sign up</div>
-            </div>
-
-            <div className="row m-2">
-                <div className="col-6 p-2">
-                    <TextField id="firstname" type="text" variant="outlined" label="Enter First Name" fullWidth/>
-                </div>
-                <div className="col-6 p-2">
-                    <TextField id="lastname" type="text" variant="outlined" label="Enter Last Name" fullWidth/>
-                </div>
-            </div>
-
-            <div className="row m-2">
-                <TextField id="username" className="p-2" type="text" variant="outlined" label="Email (user name)" fullWidth/>
-                <TextField id="password" className="p-2" type="text" variant="outlined" label="Password" fullWidth/>
-                <TextField id="re-password" type="text" variant="outlined" label="Re-enter Password" fullWidth/>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            icon={<CheckBoxOutlineBlankIcon fontSize="small"/>}
-                            checkedIcon={<CheckBoxIcon fontsize="small"/>}
-                            name="checkedI"
-                        />
-                    }
-                    label="I agree to all terms & conditions"
-                />
-                <Button variant="contained" color="primary">Create account</Button>
-            </div>
-
-            <Divider variant="middle"/>
-            <p className="text-center">
-                <Link to="/" className="text-black-50">
-                    <h5>Already have an Account?</h5>
-                </Link>
-            </p>
-
+          <label htmlFor="email">Email (username):</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            onChange={handleChange}
+          ></input>
         </div>
-    )
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            onChange={handleChange}
+          ></input>
+        </div>
+        <div>
+          <label htmlFor="re-password">Re-enter password:</label>
+          <input
+            type="password"
+            name="re-password"
+            id="re-password"
+            onChange={handleChange}
+          ></input>
+        </div>
+        <div>
+          <button type="submit">Signup</button>
+          <button onClick={handleCancel}>Cancel</button>
+        </div>
+      </form>
+      <div>
+        <Link to="/sign_in">Already have an account?</Link>
+      </div>
+    </div>
+  );
 }
-export default SignUp;

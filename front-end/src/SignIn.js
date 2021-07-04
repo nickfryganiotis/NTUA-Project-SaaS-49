@@ -1,47 +1,41 @@
-import React from 'react';
-import {Divider, TextField, Button, FormControlLabel, Checkbox } from '@material-ui/core';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import PersonIcon from '@material-ui/icons/Person';
+import React, { useState } from "react";
 
-import { Link } from "react-router-dom";
+export default function SignIn() {
+  const [credentials, setCredentials] = useState({});
 
-const SignIn = () => {
-    return (
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    setCredentials({ ...credentials, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    //MAKE LOGIN API CALL
+  };
+
+  return (
+    <div className="login-container">
+      <form onSubmit={handleSubmit}>
         <div>
-            <div className="icon">
-                <div className="icon_class">
-                    <PersonIcon fontSize="large"/>
-                </div>
-                <div className="text">Login</div>
-            </div>
-
-
-
-            <div className="row m-2">
-                <TextField id="username" className="p-2" type="text" variant="outlined" label="User name" fullWidth/>
-                <TextField id="password" className="p-2" type="text" variant="outlined" label="Password" fullWidth/>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            icon={<CheckBoxOutlineBlankIcon fontSize="small"/>}
-                            checkedIcon={<CheckBoxIcon fontsize="small"/>}
-                            name="checkedI"
-                        />
-                    }
-                    label="Remember me"
-                />
-                <Button variant="contained" color="primary">Login</Button>
-            </div>
-
-            <Divider variant="middle"/>
-            <p className="text-center">
-                <Link to="/sign_up" className="text-black-50">
-                    <h5>Create Account</h5>
-                </Link>
-            </p>
-
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            onChange={handleChange}
+          ></input>
         </div>
-    )
+        <div>
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            onChange={handleChange}
+          ></input>
+        </div>
+      </form>
+      <button onClick={handleSubmit}>Login</button>
+    </div>
+  );
 }
-export default SignIn;
