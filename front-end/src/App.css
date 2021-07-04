@@ -1,22 +1,14 @@
-.app{
+.ama-header{
     margin: 20px;
     padding: 20px;
-    justify-content: center;
     box-shadow: 0 6px 20px 0 rgba(0,0,0,0.19);
+    font-size: 30pt;
+    display:flex;
 }
 
-.icon{
-    display: flex;
+.login-container {
+    display:flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
-}
-
-.text{
-    color: #02706B;
-    font-size: 40px;
-    font-weight: bold;
-}
-
-.icon.class>.MuiSvgIconRoot {
-    color: #02706B;
-
 }
