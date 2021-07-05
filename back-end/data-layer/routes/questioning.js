@@ -13,14 +13,7 @@ router.get( '/get_keywords' , ( req , res ) => {
     const query = "SELECT * FROM keyword";
     connection.query( query , ( error, results ) => {
         if ( error ) throw  error;
-        let keywords = [];
-        for( let i = 0; i < results.length; i++ ) {
-            keywords.push( results[ i ][ 'keyword_title' ] );
-        }
-
-        /* get_keywords returns a json containing an array with all the keywords
-         */
-        res.send( { keywords: keywords} );
+        res.send( { keywords: results} );
     } )
 } )
 
