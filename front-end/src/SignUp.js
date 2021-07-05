@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -12,7 +13,19 @@ export default function SignUp() {
     e.preventDefault();
     if (user.hasOwnProperty("password") && user.hasOwnProperty("re-password")) {
       if (user["password"] === user["re-password"]) {
-        console.log(user);
+        let signup_options = {
+          method: "POST",
+          url: "http://localhost:3002/sign_up",
+          data: user
+        }
+        axios(signup_options).then((res) =>  {
+          console.log(res)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+
+
       } else {
         alert("Passwords must match!");
       }
@@ -29,11 +42,11 @@ export default function SignUp() {
       <h2>Sign Up</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="email">Email (username):</label>
+          <label htmlFor="username">Email (username):</label>
           <input
             type="email"
-            name="email"
-            id="email"
+            name="username"
+            id="username"
             onChange={handleChange}
           ></input>
         </div>

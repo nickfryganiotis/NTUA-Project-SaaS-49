@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 export default function SignIn() {
   const [credentials, setCredentials] = useState({});
-
+  const hist = useHistory()
   const handleChange = (e) => {
     const { value, name } = e.target;
     setCredentials({ ...credentials, [name]: value });
@@ -10,7 +12,20 @@ export default function SignIn() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    //MAKE LOGIN API CALL
+    const auth_options = {
+      method: "POST",
+      url: "http://localhost:3002/sign_in",
+      data: credentials,
+    };
+    axios(auth_options)
+      .then((res) => {
+        const token = res.data
+        localStorage.setItem("ask-me-anything-token", JSON.stringify(token))
+        hist.push("/")
+      })
+      .catch((error) => {
+        console.log(error)
+      });
   };
 
   return (
