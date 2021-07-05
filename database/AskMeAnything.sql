@@ -2,7 +2,7 @@ CREATE SCHEMA IF NOT EXISTS AskMeAnythingDB;
 USE AskMeAnythingDB;
 
 CREATE TABLE user (
-	username VARCHAR(20),
+	username VARCHAR(100),
     password VARCHAR(100),
     PRIMARY KEY(username)
 );

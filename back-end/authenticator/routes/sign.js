@@ -23,7 +23,7 @@ passport.use( 'sign-in' , new LocalStrategy( ( username , password , done ) => {
         */
         const options = {
             method: "post",
-            url: "http://localhost:3003/authenticate",
+            url: "http://localhost:5002/authenticate",
             data: {
                 username: username,
                 password: password
@@ -60,7 +60,7 @@ router.post( '/sign_up' , ( req , res ) => {
 
     const options = {
         method: "post",
-        url: "http://localhost:3003/add_user",
+        url: "http://localhost:5002/add_user",
         data: user
     };
 

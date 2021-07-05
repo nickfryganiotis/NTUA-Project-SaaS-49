@@ -13,8 +13,8 @@ export default function SignIn() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const auth_options = {
-      method: "POST",
-      url: "http://localhost:3002/sign_in",
+      method: "post",
+      url: "http://localhost:5000/sign_in",
       data: credentials,
     };
     axios(auth_options)

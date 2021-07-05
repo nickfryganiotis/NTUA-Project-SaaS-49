@@ -4,9 +4,11 @@ const cookieParser = require( 'cookie-parser' );
 const logger = require( 'morgan' );
 const authRouter = require( './routes/authenticate' );
 const addUserRouter = require( './routes/add-user' );
+const bodyParser = require('body-parser')
+const cors = require('cors')
 
 let app = express();
-
+app.use(cors())
 app.use( logger('dev') );
 app.use( express.json() );
 app.use( express.urlencoded( { extended: false } ) );
@@ -16,10 +18,13 @@ app.use( cookieParser() );
 app.use( '/' , authRouter );
 app.use( '/add_user' , addUserRouter );
 
-const PORT = 3003;
+const PORT = 5002;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 // catch 404 and forward to error handler
 // catch 404 and forward to error handler
+
+
+
 app.use( ( req, res , next ) => {
   next(createError(404));
 });
@@ -45,6 +50,8 @@ app.use( (err, req, res, next ) => {
   //Json sets content-type header. This is also the difference between 'end' and 'send'
   //'res.send()' includes also the content-type, except from a simple string
 });
+
+
 
 
 module.exports = app;
