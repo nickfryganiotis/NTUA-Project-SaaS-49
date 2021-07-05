@@ -19,7 +19,9 @@ CREATE TABLE question (
     question_text VARCHAR(1000),
     date_asked DATETIME,
     keyword_id INT,
-    PRIMARY KEY(question_id)
+    username VARCHAR(100),
+    PRIMARY KEY(question_id),
+    FOREIGN KEY(username) REFERENCES user(username)
 );
 
 CREATE TABLE has_keyword (
@@ -35,6 +37,8 @@ CREATE TABLE answer (
     answer_text VARCHAR(10000),
     question_id INT,
     date_posted DATETIME,
+    username VARCHAR(100),
     PRIMARY KEY(answer_id, question_id),
-    FOREIGN KEY(question_id) REFERENCES question(question_id)
+    FOREIGN KEY(question_id) REFERENCES question(question_id),
+    FOREIGN KEY(username) REFERENCES user(username)
 );
