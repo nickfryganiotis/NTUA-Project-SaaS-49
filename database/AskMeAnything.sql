@@ -19,7 +19,6 @@ CREATE TABLE question (
     question_text VARCHAR(1000),
     date_asked DATETIME,
     keyword_id INT,
-    FOREIGN KEY(keyword_id) REFERENCES keyword(keyword_id),
     PRIMARY KEY(question_id)
 );
 
