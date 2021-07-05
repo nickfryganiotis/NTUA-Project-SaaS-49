@@ -56,8 +56,12 @@ router.post( '/sign_in' , passport.authenticate( 'sign-in' , {session: false } )
 } )
 
 router.post( '/sign_up' , ( req , res ) => {
-    const user = req.body;
-
+    let user = req.body;
+    for( let key in user ) {
+        if( ( key!== "username" ) && ( key!== "email" ) && ( key!== "password" ) ) {
+            delete user[ key ];
+        }
+    }
     const options = {
         method: "post",
         url: "http://localhost:5002/add_user",

@@ -1,10 +1,10 @@
-const createError = require( 'http-errors' );
+//const createError = require( 'http-errors' );
 const express = require( 'express' );
 const cookieParser = require( 'cookie-parser' );
 const logger = require( 'morgan' );
 const authRouter = require( './routes/authenticate' );
 const addUserRouter = require( './routes/add-user' );
-const bodyParser = require('body-parser')
+const questionRouter = require('./routes/questioning')
 const cors = require('cors')
 
 let app = express();
@@ -17,6 +17,7 @@ app.use( cookieParser() );
 //import routers
 app.use( '/' , authRouter );
 app.use( '/add_user' , addUserRouter );
+app.use( '/' , questionRouter );
 
 const PORT = 5002;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

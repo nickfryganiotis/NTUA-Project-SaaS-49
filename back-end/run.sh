@@ -1,1 +1,1 @@
-node ./authenticator/app.js & node ./data-layer/app.js
+node ./authenticator/app.js & node ./data-layer/app.js & node ./question/app.js
