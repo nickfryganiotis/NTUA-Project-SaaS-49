@@ -4,7 +4,8 @@ const cookieParser = require( 'cookie-parser' );
 const logger = require( 'morgan' );
 const authRouter = require( './routes/authenticate' );
 const addUserRouter = require( './routes/add-user' );
-const questionRouter = require('./routes/questioning')
+const questionRouter = require('./routes/questioning');
+const analyticsRouter = require('./routes/analytics');
 const cors = require('cors')
 
 let app = express();
@@ -18,6 +19,7 @@ app.use( cookieParser() );
 app.use( '/' , authRouter );
 app.use( '/add_user' , addUserRouter );
 app.use( '/' , questionRouter );
+app.use( '/', analyticsRouter );
 
 const PORT = 5002;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
