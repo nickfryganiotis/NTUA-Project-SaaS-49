@@ -96,6 +96,8 @@ router.get( '/whoami' ,
         res.send( {
             user: req.user
         } );
+    }, ( req , res ) => {
+        res.send( { user: req.user } );
     }
 );
 
