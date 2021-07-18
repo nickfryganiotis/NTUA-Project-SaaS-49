@@ -5,19 +5,25 @@ const router = express.Router();
 
 const esb_url = 'http://localhost:5004/authenticate'
 
+
 router.post('/questions_per_keyword' , ( req , res) => {
     const token = req.body[ 'token' ];
-    const options = {
-        method: "post",
+    const auth_options = {
+        method: 'post',
         url: esb_url,
-        data: {token: token}
+        data: {'token': token}
     };
-
-    axios(options).then( (in_res) => {
+    axios(auth_options).then( (in_res) => {
         console.log(in_res.data);
-        res.send(in_res.data);
+        axios.get( 'http://localhost:5002/questions_per_keyword' ).then( ( in_req ) => {
+            res.send( in_req.data );
+        } ).catch( ( error ) => {
+            console.log( error );
+            res.send( error.status );
+        } )
     }).catch( (error ) => {
         console.log(error)
+        res.send(error.response.status);
     });
 
 })

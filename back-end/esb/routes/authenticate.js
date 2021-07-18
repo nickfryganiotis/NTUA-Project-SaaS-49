@@ -10,7 +10,7 @@ router.post( '/authenticate' , ( req , res ) => {
         }
     }).then( (in_res) => {
         //console.log(in_res.data);
-        res.send(in_res.status);
+        res.send(in_res.data);
     }).catch( ( error ) => {
         console.log( error );
         res.send(error.response.status);
