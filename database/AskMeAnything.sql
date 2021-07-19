@@ -17,8 +17,7 @@ CREATE TABLE question (
 	question_id INT AUTO_INCREMENT,
     question_title VARCHAR(200),
     question_text VARCHAR(1000),
-    date_asked DATETIME,
-    keyword_id INT,
+    date_asked DATETIME default current_timestamp,
     username VARCHAR(100),
     PRIMARY KEY(question_id),
     FOREIGN KEY(username) REFERENCES user(username)
