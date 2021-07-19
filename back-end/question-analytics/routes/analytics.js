@@ -94,4 +94,56 @@ router.post('/my_questions' , ( req  , res ) => {
     });
 })
 
+router.post('/my_answers' , ( req , res ) => {
+    const token = req.body['token'];
+    const auth_options = {
+        method: 'post',
+        url: esb_url,
+        data: {'token': token}
+    };
+    axios(auth_options).then( (in_res) => {
+        console.log(in_res.data);
+        answer_options = {
+            method: 'post',
+            url: 'http://localhost:5002/my_answers',
+            data: {'username': in_res.data['user']['username']}
+        };
+        axios( answer_options ).then( ( in_req ) => {
+            res.send( in_req.data );
+        } ).catch( ( error ) => {
+            console.log( error );
+            res.send( error.response.status );
+        } )
+    }).catch( (error ) => {
+        console.log(error)
+        res.send(error.response.status);
+    });
+} )
+
+router.post('/my_contributions_per_day' , ( req , res ) => {
+    const token = req.body['token'];
+    const auth_options = {
+        method: 'post',
+        url: esb_url,
+        data: {'token': token}
+    };
+    axios(auth_options).then( (in_res) => {
+        console.log(in_res.data);
+        contribution_options = {
+            method: 'post',
+            url: 'http://localhost:5002/my_contributions_per_day',
+            data: {'username': in_res.data['user']['username']}
+        };
+        axios( contribution_options ).then( ( in_req ) => {
+            res.send( in_req.data );
+        } ).catch( ( error ) => {
+            console.log( error );
+            res.send( error.response.status );
+        } )
+    }).catch( (error ) => {
+        console.log(error)
+        res.send(error.response.status);
+    });
+})
+
 module.exports = router;
