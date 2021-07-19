@@ -18,6 +18,7 @@ router.post('/get_keywords' , ( req , res ) => {
             res.send( in_req.data );
         } ).catch( ( error ) => {
             console.log( error );
+            res.send( error.response.status );
         } )
     }).catch( ( error ) => {
         console.log( error );
@@ -25,6 +26,7 @@ router.post('/get_keywords' , ( req , res ) => {
     })
 
 })
+
 
 router.post( '/create_question' , ( req , res ) => {
     const token = req.body[ 'token' ];

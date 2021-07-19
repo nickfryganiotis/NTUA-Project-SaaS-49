@@ -6,6 +6,7 @@ const authRouter = require( './routes/authenticate' );
 const addUserRouter = require( './routes/add-user' );
 const questionRouter = require('./routes/questioning');
 const analyticsRouter = require('./routes/analytics');
+const answerRouter = require('./routes/answering')
 const cors = require('cors')
 
 let app = express();
@@ -20,6 +21,7 @@ app.use( '/' , authRouter );
 app.use( '/add_user' , addUserRouter );
 app.use( '/' , questionRouter );
 app.use( '/', analyticsRouter );
+app.use('/answer_question',answerRouter);
 
 const PORT = 5002;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
