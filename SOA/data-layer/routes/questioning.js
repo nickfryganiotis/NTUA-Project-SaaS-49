@@ -17,6 +17,14 @@ router.get( '/get_keywords' , ( req , res ) => {
     } )
 } )
 
+router.get( '/get_questions' , ( req , res ) => {
+    const query = "SELECT question_title FROM question"
+    connection.query( query , ( error , results) => {
+        if ( error ) throw error;
+        res.send( {questions: results } );
+    } )
+})
+
 router.post( '/add_question' , ( req , res ) => {
     const question_parameters = req.body;
     const query = "INSERT INTO question SET ?";
@@ -56,5 +64,29 @@ router.post( '/has_keywords' , ( req , res ) => {
     } )
 })
 
+router.post('/question_keywords' , ( req , res ) => {
+    const question_title = req.body[ 'question_title' ];
+    const query = `SELECT k.keyword_title FROM (SELECT h.question_id,h.keyword_id FROM 
+                   (SELECT question_id FROM question WHERE question_title = ?) AS i
+                   INNER JOIN has_keyword AS h
+                   ON h.question_id = i.question_id) AS ii
+                   INNER JOIN keyword AS k
+                   on k.keyword_id = ii.keyword_id`
+    connection.query( query , [ question_title ] , ( error , results ) => {
+        if ( error ) throw error;
+        res.send( results );
+    })
+})
+
+router.post('/question_answers' , ( req , res ) => {
+    const question_title = req.body[ 'question_title' ];
+    const query = `SELECT a.answer_text FROM answer AS a
+                   INNER JOIN (SELECT question_id FROM question WHERE question_title = ?) AS q
+                   ON a.question_id = q.question_id`
+    connection.query( query , [ question_title ] , ( error , results ) => {
+        if ( error ) throw error;
+        res.send( results );
+    })
+})
 
 module.exports = router;

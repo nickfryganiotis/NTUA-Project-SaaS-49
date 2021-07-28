@@ -27,6 +27,67 @@ router.post('/get_keywords' , ( req , res ) => {
 
 })
 
+router.post( '/get_questions' , ( req , res ) => {
+    const token = req.body[ 'token' ];
+    const auth_options = {
+        method: 'post',
+        url: esb_url,
+        data: {'token': token}
+    };
+    axios(auth_options).then( (in_res) => {
+        console.log(in_res.data);
+        axios.get( 'http://localhost:5002/get_questions' ).then( ( in_req) => {
+            console.log( in_req.data );
+            res.send( in_req.data );
+        } ).catch( ( error ) => {
+            console.log( error );
+            res.send( error.response.status );
+        } )
+    }).catch( ( error ) => {
+        console.log( error );
+        res.send(error.response.status);
+    })
+})
+
+router.post( '/question_info' , ( req , res ) => {
+    const token = req.body[ 'token' ];
+    const auth_options = {
+        method: 'post',
+        url: esb_url,
+        data: {'token': token}
+    };
+    axios(auth_options).then( (in_res) => {
+        console.log(in_res.data);
+        const question_title = req.body[ 'question_title' ];
+        const question_keywords = {
+            method: 'post',
+            url: 'http://localhost:5002/question_keywords',
+            data: {'question_title': question_title}
+        };
+        axios( question_keywords ).then( ( question_keywords_req ) => {
+            console.log( question_keywords_req.data );
+            const question_answers = {
+                method: 'post',
+                url: 'http://localhost:5002/question_answers',
+                data: {'question_title': question_title}
+            }
+            axios( question_answers ).then( ( question_answers_req) => {
+                res.send({
+                    keywords: question_keywords.data,
+                    answers: question_answers_req.data
+                });
+            } ).catch( ( error ) => {
+                res.send( error.response.status );
+            })
+        } ).catch( ( error ) => {
+            console.log( error );
+            res.send( error.response.status );
+        }  )
+    }).catch( ( error ) => {
+        console.log( error );
+        res.send( error.response.status );
+    })
+})
 
 router.post( '/create_question' , ( req , res ) => {
     const token = req.body[ 'token' ];
