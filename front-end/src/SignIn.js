@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { NavContext } from "./context/NavContext";
 
 export default function SignIn() {
   const [credentials, setCredentials] = useState({});
+  const [isSignedIn, setIsSignedIn] = useContext(NavContext)
   const hist = useHistory()
+
   const handleChange = (e) => {
     const { value, name } = e.target;
     setCredentials({ ...credentials, [name]: value });
@@ -12,6 +15,7 @@ export default function SignIn() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(credentials)
     const auth_options = {
       method: "post",
       url: "http://localhost:5000/sign_in",
@@ -19,12 +23,15 @@ export default function SignIn() {
     };
     axios(auth_options)
       .then((res) => {
-        const token = res.data
-        localStorage.setItem("ask-me-anything-token", JSON.stringify(token))
-        hist.push("/")
+          console.log(res)
+          const token = res.data
+          localStorage.setItem("ask-me-anything-token", JSON.stringify(token))
+          setIsSignedIn("profile-logout")
+          hist.push("/")
       })
       .catch((error) => {
-        console.log(error)
+        alert("Wrong username or password.")
+        e.target.reset()
       });
   };
 
@@ -49,8 +56,8 @@ export default function SignIn() {
             onChange={handleChange}
           ></input>
         </div>
+        <button type="submit">Login</button>
       </form>
-      <button onClick={handleSubmit}>Login</button>
     </div>
   );
 }

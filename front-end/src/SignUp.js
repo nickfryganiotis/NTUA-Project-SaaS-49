@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 export default function SignUp() {
   const [user, setUser] = useState({});
@@ -8,6 +8,7 @@ export default function SignUp() {
     const { value, name } = e.target;
     setUser({ ...user, [name]: value });
   };
+  const hist = useHistory()
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,7 +22,8 @@ export default function SignUp() {
           data: x
         }
         axios(signup_options).then((res) =>  {
-          console.log(res)
+          alert("Successfully created your account!")
+          hist.push("/sign_in")
         })
         .catch((error) => {
           console.log(error)
@@ -37,6 +39,7 @@ export default function SignUp() {
 
   const handleCancel = (e) => {
     e.preventDefault();
+    hist.push("/")
   };
 
   return (

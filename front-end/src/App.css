@@ -1,9 +1,12 @@
+@import url('https://css.gg/profile.css');
+@import url('https://css.gg/log-out.css');
 .ama-header{
     margin: 20px;
     padding: 20px;
     box-shadow: 0 6px 20px 0 rgba(0,0,0,0.19);
     font-size: 30pt;
     display:flex;
+    justify-content: space-between;
 }
 
 .login-container {
@@ -11,4 +14,8 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+}
+
+.ama-logo{
+    display:inline
 }
