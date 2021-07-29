@@ -73,7 +73,7 @@ router.post( '/question_info' , ( req , res ) => {
             }
             axios( question_answers ).then( ( question_answers_req) => {
                 res.send({
-                    keywords: question_keywords.data,
+                    keywords: question_keywords_req.data,
                     answers: question_answers_req.data
                 });
             } ).catch( ( error ) => {
