@@ -31,7 +31,8 @@ console.log('connected to redis');
 pool.hget('subscribers','sign-up' , async ( error , data ) => {
     let currentSubscribers = JSON.parse( data );
     let alreadySubscribed = false;
-    let myAddress = 'http://localhost:5004/add_user'
+    let myAddress = 'http://local' +
+        'host:5004/add_user'
     for( let i = 0; i < currentSubscribers.length; i++ ) {
         if( currentSubscribers[i] == myAddress ) {
             alreadySubscribed = true;
@@ -58,7 +59,7 @@ passport.use( 'sign-in' , new LocalStrategy( ( username , password , done ) => {
         */
         const options = {
             method: "post",
-            url: "/authenticate",
+            url: "http://localhost:5004/authenticate",
             data: {
                 username: username,
                 password: password
@@ -100,7 +101,12 @@ router.post( '/sign_in' , passport.authenticate( 'sign-in' , {session: false } )
 } )
 
 router.post('/add_user' , ( req , res ) => {
-    res.send(req.body);
+    const user = req.body.event;
+    const query = 'INSERT INTO USER SET ?'
+    connection.query( query , user , ( error , results) => {
+        if ( error ) throw  error;
+        res.send( results );
+    } )
 })
 
 module.exports = router;

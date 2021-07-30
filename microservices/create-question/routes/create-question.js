@@ -28,7 +28,7 @@ passport.use( 'token' , new JWTStrategy(
 
 router.post( '/create_question' , ( req , res ) => {
     const token = req.body[ 'token' ];
-    axios.get("/whoami" , {headers: {
+    axios.get("http://localhost:5002/whoami" , {headers: {
             Authorization: 'Bearer ' + token //the token is a variable which holds the token
         }
     }).then( (in_res) => {
@@ -37,7 +37,7 @@ router.post( '/create_question' , ( req , res ) => {
 
         const question_options = {
             method: "post",
-            url: "/add_question",
+            url: "http://localhost:5002/add_question",
 
             /* pass only question_title, question_text and username to data-layer component
              */
@@ -52,7 +52,7 @@ router.post( '/create_question' , ( req , res ) => {
             console.log(  question_parameters[ 'newKeywords' ] );
             const keyword_options = {
                 method: "post",
-                url: "/add_keywords",
+                url: "http://localhost:5002/add_keywords",
 
                 data: {
                     new_keywords: question_parameters[ 'newKeywords' ]
@@ -63,7 +63,7 @@ router.post( '/create_question' , ( req , res ) => {
                     new_keyword_ids.data[ 'new_keyword_ids' ] );
                 const has_keyword_options = {
                     method: "post",
-                    url: "/has_keywords",
+                    url: "http://localhost:5002/has_keywords",
                     data: {
                         question_id: question_id.data[ 'question_id' ],
                         keyword_ids: merged_keyword_ids
@@ -76,7 +76,8 @@ router.post( '/create_question' , ( req , res ) => {
                         data : {
                             question_title: question_parameters[ 'question_title' ],
                             question_text: question_parameters[ 'question_text' ],
-                            username: in_res.data[ 'user' ][ 'username' ]
+                            username: in_res.data[ 'user' ][ 'username' ],
+                            keywords: question_parameters[ 'newKeywords' ]
                         }
                     };
                     axios(choreographer_options).then( (choreographer_req) => {

@@ -7,8 +7,7 @@ CREATE TABLE question (
     question_text VARCHAR(1000),
     date_asked DATETIME default current_timestamp,
     username VARCHAR(100),
-    PRIMARY KEY(question_id),
-    FOREIGN KEY(username) REFERENCES user(username)
+    PRIMARY KEY(question_id)
 );
 
 CREATE TABLE keyword (

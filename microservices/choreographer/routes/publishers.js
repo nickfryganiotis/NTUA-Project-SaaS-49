@@ -35,7 +35,7 @@ router.post('/sign_up' , ( req , res) => {
         };
         currentMessages.push(newMessage);
         pool.hset('bus' , 'sign-up' , JSON.stringify(currentMessages) , () => {
-            pool.hget('subscribers' , 'create-question' , ( error , data) => {
+            pool.hget('subscribers' , 'sign-up' , ( error , data) => {
                 let subscribers = JSON.parse(data);
                 for ( let i = 0; i <subscribers.length; i++ ) {
                     let options = {
@@ -81,8 +81,8 @@ router.post('/create_question' , ( req , res ) => {
                     }).catch(e => {
                         console.log(subscribers[i],{'status':'lost connection'});
                     });
-                    res.send({'status':'ok'})
                 }
+                res.send({'status':'ok'})
             })
         })
     })

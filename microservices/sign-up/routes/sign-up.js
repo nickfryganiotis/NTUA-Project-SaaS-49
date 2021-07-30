@@ -47,7 +47,6 @@ router.post( '/sign_up' , ( req , res ) => {
 
 router.post('/add_user' , ( req , res ) => {
     const query = "INSERT INTO user SET ?";
-    console.log("hi")
     connection.query( query , [ req.body ] , ( error ) => {
         if( error ) throw error;
         res.send("User added correctly" );
