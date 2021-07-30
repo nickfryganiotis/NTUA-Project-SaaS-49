@@ -2,7 +2,8 @@
 const express = require( 'express' );
 const cookieParser = require( 'cookie-parser' );
 const logger = require( 'morgan' );
-const cors = require('cors')
+const cors = require('cors');
+const publisherRouter = require('./routes/publishers');
 
 let app = express();
 app.use(cors())
@@ -12,27 +13,12 @@ app.use( express.urlencoded( { extended: false } ) );
 app.use( cookieParser() );
 
 //import routers
-
+app.use( '/' , publisherRouter );
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 // catch 404 and forward to error handler
 // catch 404 and forward to error handler
-
-//Redis Connection
-
-const REDIS_PORT = 6379;
-const REDIS_HOST = 'localhost';
-const TotalConnections = 20;
-const pool = require('redis-connection-pool')('myRedisPool', {
-  host: REDIS_HOST,
-  port: REDIS_PORT,
-  max_clients: TotalConnections,
-  perform_checks: false,
-  database: 0
-});
-
-console.log('connected to redis');
 
 app.use( ( req, res , next ) => {
   next(createError(404));

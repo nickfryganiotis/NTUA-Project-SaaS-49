@@ -3,6 +3,7 @@ const express = require( 'express' );
 const cookieParser = require( 'cookie-parser' );
 const logger = require( 'morgan' );
 const cors = require('cors')
+const getKeywordsRouter = require('./routes/get-keywords')
 
 let app = express();
 app.use(cors())
@@ -12,45 +13,13 @@ app.use( express.urlencoded( { extended: false } ) );
 app.use( cookieParser() );
 
 //import routers
-
+app.use('/' , getKeywordsRouter);
 
 const PORT = 5003;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 // catch 404 and forward to error handler
 // catch 404 and forward to error handler
 
-//Redis Connection
-
-const REDIS_PORT = 6379;
-const REDIS_HOST = 'localhost';
-const TotalConnections = 20;
-const pool = require('redis-connection-pool')('myRedisPool', {
-  host: REDIS_HOST,
-  port: REDIS_PORT,
-  max_clients: TotalConnections,
-  perform_checks: false,
-  database: 0
-});
-
-pool.hget('subscribers','create-question' , async ( error , data ) => {
-  let currentSubscribers = JSON.parse( data );
-  let alreadySubscribed = false;
-  let myAddress = 'http://localhost:5003/update_keywords'
-  for( let i = 0; i < currentSubscribers.length; i++ ) {
-    if( currentSubscribers[i] == myAddress ) {
-      alreadySubscribed = true;
-    }
-  }
-  if( alreadySubscribed == false ) {
-   currentSubscribers.push( myAddress );
-   pool.hset( 'subscribers' , 'create-question' , JSON.stringify(currentSubscribers),() => {});
-   console.log('subscribed');
-  }
-  else {
-    console.log('already subscribed')
-  }
-
-} )
 
 app.use( ( req, res , next ) => {
   next(createError(404));

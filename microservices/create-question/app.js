@@ -3,6 +3,7 @@ const express = require( 'express' );
 const cookieParser = require( 'cookie-parser' );
 const logger = require( 'morgan' );
 const cors = require('cors')
+const questionRouter = require('./routes/create-question')
 
 let app = express();
 app.use(cors())
@@ -12,7 +13,7 @@ app.use( express.urlencoded( { extended: false } ) );
 app.use( cookieParser() );
 
 //import routers
-
+app.use( '/' , questionRouter );
 
 const PORT = 5002;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
