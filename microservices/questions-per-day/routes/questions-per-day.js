@@ -1,5 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const mysql = require('mysql');
+const axios = require( 'axios' );
+
+
+const connection = mysql.createConnection( {
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'QuestionsPerDayDb',
+});
+
 
 //Redis Connection
 const REDIS_PORT = 6379;
@@ -17,7 +28,7 @@ console.log('connected to redis');
 pool.hget('subscribers','create-question' , async ( error , data ) => {
     let currentSubscribers = JSON.parse( data );
     let alreadySubscribed = false;
-    let myAddress = 'http://localhost:5009/update_questions_per_day'
+    let myAddress = 'http://localhost:5009/update_questions'
     for( let i = 0; i < currentSubscribers.length; i++ ) {
         if( currentSubscribers[i] == myAddress ) {
             alreadySubscribed = true;
@@ -33,10 +44,27 @@ pool.hget('subscribers','create-question' , async ( error , data ) => {
     }
 
 } )
+router.post( '/update_question' , ( req , res ) => {
 
-router.post('/update_questions_per_day' , ( req , res ) => {
-    res.send(req.body);
+    const question_parameters = req.body;
+    const query = 'INSERT INTO question (question_title,question_text) VALUES (?,?)';
+    connection.query('query' , [question_parameters['question_title' , question_parameters['question_text']]] ,( error , results) => {
+        if (error) throw error;
+        res.send(results);
+    } )
+
+} )
+
+router.post('/questions_per_day' , ( req , res) => {
+    const query = `SELECT date(q.date_asked) as day,COUNT(*) as question_number
+                   FROM question q
+                   GROUP BY date(q.date_asked)`;
+    connection.query( query , ( error , results ) => {
+        if ( error ) throw error;
+        res.send( results );
+    } )
 })
+
 
 
 module.exports = router;

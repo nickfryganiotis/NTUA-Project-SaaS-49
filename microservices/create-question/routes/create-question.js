@@ -77,7 +77,8 @@ router.post( '/create_question' , ( req , res ) => {
                             question_title: question_parameters[ 'question_title' ],
                             question_text: question_parameters[ 'question_text' ],
                             username: in_res.data[ 'user' ][ 'username' ],
-                            keywords: question_parameters[ 'newKeywords' ]
+                            oldKeywords: question_parameters['oldKeywords'],
+                            newKeywords: question_parameters[ 'newKeywords' ]
                         }
                     };
                     axios(choreographer_options).then( (choreographer_req) => {

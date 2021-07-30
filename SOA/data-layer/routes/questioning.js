@@ -80,12 +80,21 @@ router.post('/question_keywords' , ( req , res ) => {
 
 router.post('/question_answers' , ( req , res ) => {
     const question_title = req.body[ 'question_title' ];
-    const query = `SELECT a.answer_text FROM answer AS a
+    const query = `SELECT a.answer_text,a.username,a.date_posted FROM answer AS a
                    INNER JOIN (SELECT question_id FROM question WHERE question_title = ?) AS q
                    ON a.question_id = q.question_id`
     connection.query( query , [ question_title ] , ( error , results ) => {
         if ( error ) throw error;
         res.send( results );
+    })
+})
+
+router.post('/question_text' , ( req , res ) => {
+    const question_title = req.body['question_title'];
+    const query = 'SELECT question_text FROM question WHERE question_title = ?';
+    connection.query(query , [question_title] , ( error , result) => {
+        if ( error ) throw error;
+        res.send(result);
     })
 })
 

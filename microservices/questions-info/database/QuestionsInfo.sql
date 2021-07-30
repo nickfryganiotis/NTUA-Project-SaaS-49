@@ -7,8 +7,7 @@ CREATE TABLE question (
     question_text VARCHAR(1000),
     date_asked DATETIME default current_timestamp,
     username VARCHAR(100),
-    PRIMARY KEY(question_id),
-    FOREIGN KEY(username) REFERENCES user(username)
+    PRIMARY KEY(question_id)
 );
 
 CREATE TABLE answer (
@@ -18,8 +17,7 @@ CREATE TABLE answer (
     date_posted DATETIME default current_timestamp,
     username VARCHAR(100),
     PRIMARY KEY(answer_id, question_id),
-    FOREIGN KEY(question_id) REFERENCES question(question_id),
-    FOREIGN KEY(username) REFERENCES user(username)
+    FOREIGN KEY(question_id) REFERENCES question(question_id)
 );
 
 CREATE TABLE keyword (
@@ -35,3 +33,4 @@ CREATE TABLE has_keyword (
     FOREIGN KEY(question_id) REFERENCES question(question_id),
     FOREIGN KEY(keyword_id) REFERENCES keyword(keyword_id)
 );
+

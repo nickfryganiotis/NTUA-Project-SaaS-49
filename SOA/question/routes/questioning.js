@@ -59,34 +59,44 @@ router.post( '/question_info' , ( req , res ) => {
     axios(auth_options).then( (in_res) => {
         console.log(in_res.data);
         const question_title = req.body[ 'question_title' ];
-        const question_keywords = {
+        const question_text = {
             method: 'post',
-            url: 'http://localhost:5002/question_keywords',
-            data: {'question_title': question_title}
-        };
-        axios( question_keywords ).then( ( question_keywords_req ) => {
-            console.log( question_keywords_req.data );
-            const question_answers = {
+            url: 'http://localhost:5002/question_text',
+            data: {'question_title':question_title}
+        }
+        axios( question_text ).then( ( question_text_req ) => {
+            const question_keywords = {
                 method: 'post',
-                url: 'http://localhost:5002/question_answers',
+                url: 'http://localhost:5002/question_keywords',
                 data: {'question_title': question_title}
-            }
-            axios( question_answers ).then( ( question_answers_req) => {
-                res.send({
-                    keywords: question_keywords_req.data,
-                    answers: question_answers_req.data
-                });
+            };
+
+            axios( question_keywords ).then( ( question_keywords_req ) => {
+                console.log( question_keywords_req.data );
+                const question_answers = {
+                    method: 'post',
+                    url: 'http://localhost:5002/question_answers',
+                    data: {'question_title': question_title}
+                }
+                axios( question_answers ).then( ( question_answers_req) => {
+                    res.send({
+                        keywords: question_keywords_req.data,
+                        question_text: question_text_req.data,
+                        answers: question_answers_req.data
+                    });
+                } ).catch( ( error ) => {
+                    res.send( error.response.status );
+                })
             } ).catch( ( error ) => {
+                console.log( error );
                 res.send( error.response.status );
-            })
-        } ).catch( ( error ) => {
+            }  )
+        }).catch( ( error ) => {
             console.log( error );
             res.send( error.response.status );
-        }  )
-    }).catch( ( error ) => {
-        console.log( error );
-        res.send( error.response.status );
-    })
+        })
+        } ).catch( e => { console.log( e ); res.send(e.response.status)})
+
 })
 
 router.post( '/create_question' , ( req , res ) => {
