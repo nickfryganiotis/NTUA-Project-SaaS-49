@@ -1,5 +1,5 @@
-CREATE SCHEMA IF NOT EXISTS AskMeAnythingDB;
-USE AskMeAnythingDB;
+#CREATE SCHEMA IF NOT EXISTS AskMeAnythingDB;
+#USE AskMeAnythingDB;
 
 CREATE TABLE user (
 	username VARCHAR(100),

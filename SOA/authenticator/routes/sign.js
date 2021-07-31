@@ -23,7 +23,7 @@ passport.use( 'sign-in' , new LocalStrategy( ( username , password , done ) => {
         */
         const options = {
             method: "post",
-            url: "https://ask-me-anything-data-layer.herokuapp.com/authenticate",
+            url: "https://ask-me-anything-49-data-layer.herokuapp.com/authenticate",
             data: {
                 username: username,
                 password: password
@@ -74,7 +74,7 @@ router.post( '/sign_up' , ( req , res ) => {
     }
     const options = {
         method: "post",
-        url: "https://ask-me-anything-data-layer.herokuapp.com/add_user",
+        url: "https://ask-me-anything-49-data-layer.herokuapp.com/add_user",
         data: user
     };
 

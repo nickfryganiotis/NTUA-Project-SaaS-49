@@ -17,7 +17,7 @@ router.post('/answer_question' , (req,res) => {
         const answer_text = req.body[ 'answer_text' ];
         const answer_options = {
             method: 'post',
-            url: 'https://ask-me-anything-data-layer.herokuapp.com/answer_question',
+            url: 'https://ask-me-anything-49-data-layer.herokuapp.com/answer_question',
             data: {
                 question_title: question_title,
                 answer_text: answer_text,
