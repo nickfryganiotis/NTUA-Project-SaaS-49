@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
   LineChart,
-  CartesianGrid,
   XAxis,
   YAxis,
   Tooltip,
@@ -11,11 +10,9 @@ import {
 
 export default function QuestionsPerDay(){
     const [questionsPerDay, setQuestionsPerDay] = useState({});
-    const [token, setToken] = useState({});
 
     useEffect(() => {
         let t = JSON.parse(localStorage.getItem("ask-me-anything-token"));
-        setToken(t);
         let qpd_options = {
             method: "post",
             url: "http://localhost:5001/questions_per_day",

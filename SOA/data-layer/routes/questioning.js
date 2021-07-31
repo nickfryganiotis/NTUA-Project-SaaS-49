@@ -100,7 +100,7 @@ router.post('/question_text' , ( req , res ) => {
 
 router.post('/nothing' , ( req , res ) => {
     console.log(req.body);
-    res.send("ok");
+    res.send({'new_keyword_ids' : []});
 })
 
 module.exports = router;
