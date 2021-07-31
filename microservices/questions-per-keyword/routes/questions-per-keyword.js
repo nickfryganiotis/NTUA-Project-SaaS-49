@@ -60,25 +60,51 @@ router.post( '/update_question' , ( req , res ) => {
     };
 
     axios( question_options ).then( ( question_id ) => {
-        const keyword_options = {
-            method: "post",
-            url: "http://localhost:5008/add_keywords",
+        let keyword_options;
+        if(question_parameters['newKeywords'].length > 0) {
+            keyword_options = {
+                method: "post",
+                url: "http://localhost:5008/add_keywords",
 
-            data: {
-                new_keywords: question_parameters[ 'newKeywords' ]
-            }
-        };
+                data: {
+                    new_keywords: question_parameters[ 'newKeywords' ]
+                }
+            };
+        }
+        else {
+            keyword_options = {
+                method: "post",
+                url: "http://localhost:5008/nothing",
+
+
+                data: {
+                    ups: ["ups"]
+                }
+            };
+        }
         axios( keyword_options ).then( ( new_keyword_ids ) => {
             const merged_keyword_ids = question_parameters[ 'oldKeywords' ].concat(
                 new_keyword_ids.data[ 'new_keyword_ids' ] );
-            const has_keyword_options = {
-                method: "post",
-                url: "http://localhost:5008/has_keywords",
-                data: {
-                    question_id: question_id.data[ 'question_id' ],
-                    keyword_ids: merged_keyword_ids
-                }
-            };
+            let has_keyword_options;
+            if ( merged_keyword_ids.length > 0) {
+                has_keyword_options =  {
+                    method: "post",
+                    url: "http://localhost:5008/has_keywords",
+                    data: {
+                        question_id: question_id.data[ 'question_id' ],
+                        keyword_ids: merged_keyword_ids
+                    }
+                };
+            }
+            else {
+                has_keyword_options = {
+                    method: "post",
+                    url: "http://localhost:5008/nothing",
+                    data: {
+                        ups: ["ups"]
+                    }
+                };
+            }
             axios( has_keyword_options ).then( ( add_relation ) => {
                 res.send(add_relation.data);
 
@@ -144,6 +170,9 @@ router.post('/questions_per_keyword' , ( req , res) => {
     } )
 })
 
-
+router.post('/nothing' , ( req , res ) => {
+    console.log(req.body);
+    res.send({'new_keyword_ids' : []});
+})
 
 module.exports = router;
