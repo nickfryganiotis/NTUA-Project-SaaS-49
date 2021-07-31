@@ -27,30 +27,32 @@ export default function Navbar() {
           Ask Me Anything
         </div>
 
-        <div className="ama-logo">
-          <button onClick={signOut}>Sign Out</button>
+        <div className="ama-buttons">
           <button
             onClick={() => {
               handleRedirect("profile");
             }}
+            className="ama-profile"
           >
-            <i class="gg-profile"></i>
+            My Profile
           </button>
+          <button onClick={signOut} className="ama-signout">Sign Out</button>
         </div>
       </div>
     );
   } else {
     return (
       <div className="ama-header">
-        <div className="ama-logo" onClick={handleRedirect}>
+        <div className="ama-logo" onClick={()=>handleRedirect()}>
           Ask Me Anything
         </div>
 
-        <div className="ama-logo">
+        <div className="ama-buttons">
           <button
             onClick={() => {
               handleRedirect("sign_up");
             }}
+            className="ama-signup"
           >
             Sign up
           </button>

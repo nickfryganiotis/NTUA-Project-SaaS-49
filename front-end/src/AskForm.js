@@ -10,6 +10,8 @@ export default function AskForm() {
   const [token, setToken] = useState({});
   const hist = useHistory();
   useEffect(() => {
+    if (localStorage.getItem("ask-me-anything-token") === null){hist.replace("/sign_in")}
+    else{
     let t = JSON.parse(localStorage.getItem("ask-me-anything-token"))
     setToken(t);
 
@@ -32,6 +34,7 @@ export default function AskForm() {
         }
       })
       .catch((error) => console.log(error));
+    }
   }, []);
 
   const handleQuestionChange = (e) => {
@@ -55,14 +58,15 @@ export default function AskForm() {
       }
     });
     let z = {...question}
-    z["newKeywords"] = [...newKeywordNames]
-    z["oldKeywords"] = [...oldKeywordIds]
+    z["newKeywords"] = newKeywordNames.length === 0 ? [] : [...newKeywordNames]
+    z["oldKeywords"] = oldKeywordIds.length === 0 ? [] : [...oldKeywordIds]
     setQuestion(z)
     let ask_options = {
       method: "post",
       url: "http://localhost:5003/create_question",
       data: {...z, token : token["token"]},
     };
+    console.log(z)
     axios(ask_options)
       .then((res) => {
         alert("Question successfully created, stay tuned for upcoming answers!")
@@ -73,39 +77,42 @@ export default function AskForm() {
 
   return (
     <div>
-      <h2>Ask a Question</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="title">Question Title:</label>
+      <p className="ask-header">Ask a question!</p>
+      <form onSubmit={handleSubmit} className="ask-wrapper">
+        <div className="ask-div">
+          <label htmlFor="title" className="login-label">Question Title:</label>
           <input
             type="text"
             name="question_title"
             id="question_title"
             onChange={handleQuestionChange}
             required
+            className="login-input"
           ></input>
         </div>
-        <div>
-          <label htmlFor="text">Question Text:</label>
+        <div className="ask-div">
+          <label htmlFor="text" className="login-label">Question Text:</label>
           <textarea
             name="question_text"
             id="question_text"
             onChange={handleQuestionChange}
             required
+            className="ask-textarea"
           ></textarea>
         </div>
-        <div>
-          <label htmlFor="keywords">Keywords:</label>
+        <div className="ask-div">
+          <label htmlFor="keywords" className="login-label">Keywords:</label>
           <Creatable
             isMulti
             isClearable
             options={keywordList}
             onChange={(value) => handleKeywordChange(value)}
+            className="login-input"
           ></Creatable>
         </div>
-        <div>
-          <button type="submit">Submit</button>
-          <button onClick={() => hist.push("/")}>Cancel</button>
+        <div className="ask-div-buttons">
+          <button type="submit" className="ask-submit">Submit</button>
+          <button onClick={() => hist.push("/")} className="ask-cancel">Cancel</button>
         </div>
       </form>
     </div>

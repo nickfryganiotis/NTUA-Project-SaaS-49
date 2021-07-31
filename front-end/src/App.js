@@ -10,8 +10,20 @@ import Profile from "./Profile";
 import Error from "./Error";
 import Navbar from "./Navbar";
 import { NavProvider } from "./context/NavContext";
+import "./styling/login.css";
+import "./styling/signup.css"
+import "./styling/homepage.css"
+import "./styling/graphs.css"
+import "./styling/question.css"
+import "./styling/answer.css"
+import "./styling/qna.css"
+import QuestionsPerKeyword from "./QuestionsPerKeyword";
+import QuestionsPerDay from "./QuestionsPerDay";
+import MyQna from "./MyQna";
+import MyContributions from "./MyContributions";
 
 function App() {
+
   return (
     <div className="app">
       <NavProvider>
@@ -23,6 +35,10 @@ function App() {
           <Route path="/answer" exact component={AnswerForm} />
           <Route path="/" exact component={Homepage} />
           <Route path="/profile" exact component={Profile} />
+          <Route path="/questions-per-keyword" exact component={QuestionsPerKeyword}/>
+          <Route path="/questions-per-day" exact component={QuestionsPerDay}/>
+          <Route path="/my-contributions" exact component={MyContributions}/>
+          <Route path="/my-qna" exact component={MyQna}/>
           <Route path="*" exact component={Error} />
         </Switch>
       </NavProvider>

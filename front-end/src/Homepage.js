@@ -1,43 +1,7 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import {
-  LineChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  Line,
-  BarChart,
-  Bar,
-} from "recharts";
+import React from "react";
+import { Link, useHistory } from "react-router-dom";
 
 export default function Homepage() {
-  const [questionsPerKeyword, setQuestionsPerKeyword] = useState([]);
-  const [questionsPerDay, setQuestionsPerDay] = useState({});
-  const [token, setToken] = useState({});
-
-  useEffect(() => {
-    let t = JSON.parse(localStorage.getItem("ask-me-anything-token"));
-    setToken(t);
-    let qpk_options = {
-      method: "post",
-      url: "http://localhost:5001/questions_per_keyword",
-      data: t,
-    };
-    let qpd_options = {
-      method: "post",
-      url: "http://localhost:5001/questions_per_day",
-      data: t,
-    };
-    axios.all([axios(qpk_options), axios(qpd_options)]).then(axios.spread((...responses)=>{
-      console.log(responses)
-      setQuestionsPerKeyword(responses[0]["data"]);
-      setQuestionsPerDay(responses[1]["data"]);
-    })).catch((errors) => console.log(errors))
-    console.log(questionsPerKeyword);
-  }, []);
 
   let history = useHistory();
   const handleRedirect = (destination) => {
@@ -46,49 +10,46 @@ export default function Homepage() {
 
   return (
     <div>
-      <h2>Welcome to AskMeAnything</h2>
-      <table>
-        <tbody>
-          <tr>
-            <td>
-              <button onClick={() => handleRedirect("ask")}>
-                Ask a question
-              </button>
-              <button onClick={() => handleRedirect("answer")}>
-                Answer a question
-              </button>
-            </td>
-            <td>
-              <BarChart
-                width={730}
-                height={250}
-                data={questionsPerKeyword}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="keyword_title" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="question_number" fill="#00a0fc" />
-              </BarChart>
-            </td>
-            <td>
-              <LineChart
-                width={730}
-                height={250}
-                data={questionsPerDay}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="question_number" stroke="#8884d8" />
-              </LineChart>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="homepage-wrapper">
+        <div>
+          <button
+            onClick={() => handleRedirect("questions-per-keyword")}
+            className="homepage-button"
+          >
+            Questions per Keyword
+          </button>
+        </div>
+        <div>
+          <button
+            onClick={() => handleRedirect("questions-per-day")}
+            className="homepage-button"
+          >
+            Questions per Day
+          </button>
+        </div>
+        <div>
+          <button
+            onClick={() => handleRedirect("ask")}
+            className="homepage-button"
+          >
+            Ask a question
+          </button>
+        </div>
+        <div>
+          <button
+            onClick={() => handleRedirect("answer")}
+            className="homepage-button"
+          >
+            Answer a question
+          </button>
+        </div>
+      </div>
+      <div className="homepage-bottom">
+      <a target="_blank" rel="noopener noreferrer" href="https://github.com/nickfryganiotis/NTUA-Project-SaaS-49">Contact Us</a>
+      <a target="_blank" rel="noopener noreferrer" href="https://github.com/nickfryganiotis/NTUA-Project-SaaS-49" >Documentation</a>
+      <a target="_blank" rel="noopener noreferrer" href="https://github.com/nickfryganiotis/NTUA-Project-SaaS-49" >Github Page</a>
+      <a target="_blank" rel="noopener noreferrer" href="https://courses.pclab.ece.ntua.gr/course/view.php?id=34" >Course Materials</a>
+      </div>
     </div>
   );
 }

@@ -44,43 +44,50 @@ export default function SignUp() {
 
   return (
     <div>
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Email (username):</label>
+      <p className="login-header">Sign Up</p>
+      <form onSubmit={handleSubmit} className="signup-form">
+        <div className="ask-div">
+          <label htmlFor="username" className="login-label">Email (username):</label>
           <input
             type="email"
             name="username"
             id="username"
             onChange={handleChange}
+            className="login-input"
           ></input>
         </div>
-        <div>
-          <label htmlFor="password">Password:</label>
+        <div className="ask-div">
+          <label htmlFor="password" className="login-label">Password:</label>
           <input
             type="password"
             name="password"
             id="password"
             onChange={handleChange}
+            className="login-input"
           ></input>
         </div>
-        <div>
-          <label htmlFor="re-password">Re-enter password:</label>
+        <div className="ask-div">
+          <label htmlFor="re-password" className="login-label">Re-enter password:</label>
           <input
             type="password"
             name="re-password"
             id="re-password"
             onChange={handleChange}
+            className="login-input"
           ></input>
         </div>
-        <div>
-          <button type="submit">Signup</button>
-          <button onClick={handleCancel}>Cancel</button>
+        <div className="ask-div-buttons">
+            <button type="submit" className="ask-submit">
+              Sign me up
+            </button>
+            <button className="ask-cancel" onClick={handleCancel}>
+              Cancel
+            </button>
         </div>
-      </form>
-      <div>
-        <Link to="/sign_in">Already have an account?</Link>
+        <div>
+        <Link to="/sign_in" className="signup-link">Already have an account?</Link>
       </div>
-    </div>
+      </form>
+      </div>
   );
 }
