@@ -33,7 +33,7 @@ router.get( '/questions_per_day' , ( req , res ) => {
 
 router.post( '/my_questions' , ( req , res ) => {
     const username = req.body[ 'username' ];
-    const query = 'SELECT question_title FROM question WHERE username = ?';
+    const query = 'SELECT question_title, date_asked FROM question WHERE username = ?';
     connection.query( query , [ username ] , ( error , results) => {
         if ( error ) throw error;
         res.send( results );
@@ -42,7 +42,7 @@ router.post( '/my_questions' , ( req , res ) => {
 
 router.post( '/my_answers' , ( req , res ) => {
     const username = req.body[ 'username' ];
-    const query = `SELECT a.answer_text,q.question_title
+    const query = `SELECT a.answer_text,q.question_title, q.question_text, a.date_posted
                    FROM answer a
                    LEFT OUTER JOIN question q
                    ON a.question_id = q.question_id
