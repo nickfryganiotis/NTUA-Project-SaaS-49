@@ -98,4 +98,9 @@ router.post('/question_text' , ( req , res ) => {
     })
 })
 
+router.post('/nothing' , ( req , res ) => {
+    console.log(req.body);
+    res.send("ok");
+})
+
 module.exports = router;
