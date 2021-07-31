@@ -71,7 +71,7 @@ router.post('/update_my_questions' , ( req , res ) => {
     });
 })
 
-router.post('/get_keywords' , ( req , res ) => {
+router.post('/my_questions' , ( req , res ) => {
     const token = req.body[ 'token' ];
     axios.get("http://localhost:5010/whoami" , {headers: {
             Authorization: 'Bearer ' + token //the token is a variable which holds the token
