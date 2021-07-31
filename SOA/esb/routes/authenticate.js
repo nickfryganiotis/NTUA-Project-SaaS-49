@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post( '/authenticate' , ( req , res ) => {
     const token = req.body[ 'token' ];
-    axios.get("http://localhost:5000/whoami" , {headers: {
+    axios.get("https://ask-me-anything-auth.herokuapp.com/whoami" , {headers: {
             Authorization: 'Bearer ' + token //the token is a variable which holds the token
         }
     }).then( (in_res) => {

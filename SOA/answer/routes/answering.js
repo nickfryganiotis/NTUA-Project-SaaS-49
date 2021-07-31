@@ -2,7 +2,7 @@ const express = require( 'express' );
 const router = express.Router();
 const axios = require( 'axios' );
 
-const esb_url = 'http://localhost:5004/authenticate'
+const esb_url = 'https://ask-me-anything-esb.herokuapp.com/authenticate'
 
 router.post('/answer_question' , (req,res) => {
     const token = req.body[ 'token' ];
@@ -17,7 +17,7 @@ router.post('/answer_question' , (req,res) => {
         const answer_text = req.body[ 'answer_text' ];
         const answer_options = {
             method: 'post',
-            url: 'http://localhost:5002/answer_question',
+            url: 'https://ask-me-anything-data-layer.herokuapp.com/answer_question',
             data: {
                 question_title: question_title,
                 answer_text: answer_text,

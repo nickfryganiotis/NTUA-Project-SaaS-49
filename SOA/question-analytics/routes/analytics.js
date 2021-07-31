@@ -3,7 +3,7 @@ const express = require( 'express' );
 const axios = require( 'axios' );
 const router = express.Router();
 
-const esb_url = 'http://localhost:5004/authenticate'
+const esb_url = 'https://ask-me-anything-esb.herokuapp.com/authenticate'
 
 /*const question_aux = async ( token , add ) => {
     const auth_options = {
@@ -26,7 +26,7 @@ const esb_url = 'http://localhost:5004/authenticate'
 }
 */
 router.post( '/questions_per_keyword' , ( req , res ) => {
-    axios.get( 'http://localhost:5002/questions_per_keyword' ).then( ( in_req ) => {
+    axios.get( 'https://ask-me-anything-data-layer.herokuapp.com/questions_per_keyword' ).then( ( in_req ) => {
         res.send( in_req.data );
     } ).catch( ( error ) => {
         console.log( error );
@@ -36,7 +36,7 @@ router.post( '/questions_per_keyword' , ( req , res ) => {
 
 router.post( '/questions_per_day' , ( req , res ) => {
 
-    axios.get( 'http://localhost:5002/questions_per_day' ).then( ( in_req ) => {
+    axios.get( 'https://ask-me-anything-data-layer.herokuapp.com/questions_per_day' ).then( ( in_req ) => {
         res.send( in_req.data );
     } ).catch( ( error ) => {
         console.log( error );

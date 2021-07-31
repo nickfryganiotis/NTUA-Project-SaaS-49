@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require( 'axios' );
 
-const esb_url = 'http://localhost:5004/authenticate'
+const esb_url = 'https://ask-me-anything-esb.herokuapp.com/authenticate'
 
 router.post('/get_keywords' , ( req , res ) => {
     const token = req.body[ 'token' ];
@@ -13,7 +13,7 @@ router.post('/get_keywords' , ( req , res ) => {
     };
     axios(auth_options).then( (in_res) => {
         console.log(in_res.data);
-        axios.get( 'http://localhost:5002/get_keywords' ).then( ( in_req) => {
+        axios.get( 'https://ask-me-anything-data-layer.herokuapp.com/get_keywords' ).then( ( in_req) => {
             console.log( in_req.data );
             res.send( in_req.data );
         } ).catch( ( error ) => {
@@ -36,7 +36,7 @@ router.post( '/get_questions' , ( req , res ) => {
     };
     axios(auth_options).then( (in_res) => {
         console.log(in_res.data);
-        axios.get( 'http://localhost:5002/get_questions' ).then( ( in_req) => {
+        axios.get( 'https://ask-me-anything-data-layer.herokuapp.com/get_questions' ).then( ( in_req) => {
             console.log( in_req.data );
             res.send( in_req.data );
         } ).catch( ( error ) => {
@@ -61,13 +61,13 @@ router.post( '/question_info' , ( req , res ) => {
         const question_title = req.body[ 'question_title' ];
         const question_text = {
             method: 'post',
-            url: 'http://localhost:5002/question_text',
+            url: 'https://ask-me-anything-data-layer.herokuapp.com/question_text',
             data: {'question_title':question_title}
         }
         axios( question_text ).then( ( question_text_req ) => {
             const question_keywords = {
                 method: 'post',
-                url: 'http://localhost:5002/question_keywords',
+                url: 'https://ask-me-anything-data-layer.herokuapp.com/question_keywords',
                 data: {'question_title': question_title}
             };
 
@@ -75,7 +75,7 @@ router.post( '/question_info' , ( req , res ) => {
                 console.log( question_keywords_req.data );
                 const question_answers = {
                     method: 'post',
-                    url: 'http://localhost:5002/question_answers',
+                    url: 'https://ask-me-anything-data-layer.herokuapp.com/question_answers',
                     data: {'question_title': question_title}
                 }
                 axios( question_answers ).then( ( question_answers_req) => {
@@ -112,7 +112,7 @@ router.post( '/create_question' , ( req , res ) => {
 
         const question_options = {
             method: "post",
-            url: "http://localhost:5002/add_question",
+            url: "https://ask-me-anything-data-layer.herokuapp.com/add_question",
 
             /* pass only question_title, question_text and username to data-layer component
              */
@@ -129,7 +129,7 @@ router.post( '/create_question' , ( req , res ) => {
             if(question_parameters['newKeywords'].length > 0) {
                 keyword_options = {
                     method: "post",
-                    url: "http://localhost:5002/add_keywords",
+                    url: "https://ask-me-anything-data-layer.herokuapp.com/add_keywords",
 
 
                     data: {
@@ -140,7 +140,7 @@ router.post( '/create_question' , ( req , res ) => {
             else {
                 keyword_options = {
                     method: "post",
-                    url: "http://localhost:5002/nothing",
+                    url: "https://ask-me-anything-data-layer.herokuapp.com/nothing",
 
 
                     data: {
@@ -155,7 +155,7 @@ router.post( '/create_question' , ( req , res ) => {
                 if ( merged_keyword_ids.length > 0) {
                     has_keyword_options =  {
                         method: "post",
-                        url: "http://localhost:5002/has_keywords",
+                        url: "https://ask-me-anything-data-layer.herokuapp.com/has_keywords",
                         data: {
                             question_id: question_id.data[ 'question_id' ],
                             keyword_ids: merged_keyword_ids
@@ -165,7 +165,7 @@ router.post( '/create_question' , ( req , res ) => {
                 else {
                     has_keyword_options = {
                         method: "post",
-                        url: "http://localhost:5002/nothing",
+                        url: "https://ask-me-anything-data-layer.herokuapp.com/nothing",
                         data: {
                             ups: ["ups"]
                         }
