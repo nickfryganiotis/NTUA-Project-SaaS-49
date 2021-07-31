@@ -26,6 +26,59 @@ passport.use( 'token' , new JWTStrategy(
     }
 ) );
 
+//Redis Connection
+const REDIS_PORT = 6379;
+const REDIS_HOST = 'localhost';
+const TotalConnections = 20;
+const pool = require('redis-connection-pool')('myRedisPool', {
+    host: REDIS_HOST,
+    port: REDIS_PORT,
+    max_clients: TotalConnections,
+    perform_checks: false,
+    database: 0
+});
+console.log('connected to redis');
+
+pool.hget('subscribers','create-question' , async ( error , data ) => {
+    let currentSubscribers = JSON.parse( data );
+    let alreadySubscribed = false;
+    let myAddress = 'http://localhost:5006/update_question'
+    for( let i = 0; i < currentSubscribers.length; i++ ) {
+        if( currentSubscribers[i] == myAddress ) {
+            alreadySubscribed = true;
+        }
+    }
+    if( alreadySubscribed == false ) {
+        currentSubscribers.push( myAddress );
+        pool.hset( 'subscribers' , 'create-question' , JSON.stringify(currentSubscribers),() => {});
+        console.log('subscribed');
+    }
+    else {
+        console.log('already subscribed')
+    }
+
+} )
+
+pool.hget('subscribers','answer-question' , async ( error , data ) => {
+    let currentSubscribers = JSON.parse( data );
+    let alreadySubscribed = false;
+    let myAddress = 'http://localhost:5006/update_answers'
+    for( let i = 0; i < currentSubscribers.length; i++ ) {
+        if( currentSubscribers[i] == myAddress ) {
+            alreadySubscribed = true;
+        }
+    }
+    if( alreadySubscribed == false ) {
+        currentSubscribers.push( myAddress );
+        pool.hset( 'subscribers' , 'answer-question' , JSON.stringify(currentSubscribers),() => {});
+        console.log('subscribed');
+    }
+    else {
+        console.log('already subscribed')
+    }
+
+} )
+
 router.post( '/update_question' , ( req , res ) => {
 
         const question_parameters = req.body;
@@ -70,9 +123,7 @@ router.post( '/update_question' , ( req , res ) => {
         }).catch( (error) => {
             console.log(error);
         })
-
-
-
+    
 } )
 
 router.post( '/add_question' , ( req , res ) => {
@@ -114,7 +165,98 @@ router.post( '/has_keywords' , ( req , res ) => {
     } )
 })
 
+router.post('/update_answers' , ( req , res ) => {
+    const username = req.body['username'];
+    const question_title = req.body['question_title'];
+    const answer_text = req.body['answer_text'];
+    const query = 'INSERT INTO answer (?,?,?)'
+    connection.query( query , [username,question_title,answer_text] , ( error , results ) => {
+        if ( error ) throw error;
+        res.send( results );
+    })
+})
 
+router.post( '/question_info' , ( req , res ) => {
+    const token = req.body[ 'token' ];
+    axios.get("http://localhost:5006/whoami" , {headers: {
+            Authorization: 'Bearer ' + token //the token is a variable which holds the token
+        }
+    }).then( (in_res) => {
+        console.log(in_res.data);
+        const question_title = req.body[ 'question_title' ];
+        const question_text = {
+            method: 'post',
+            url: 'http://localhost:5006/question_text',
+            data: {'question_title':question_title}
+        }
+        axios( question_text ).then( ( question_text_req ) => {
+            const question_keywords = {
+                method: 'post',
+                url: 'http://localhost:5006/question_keywords',
+                data: {'question_title': question_title}
+            };
+
+            axios( question_keywords ).then( ( question_keywords_req ) => {
+                console.log( question_keywords_req.data );
+                const question_answers = {
+                    method: 'post',
+                    url: 'http://localhost:5006/question_answers',
+                    data: {'question_title': question_title}
+                }
+                axios( question_answers ).then( ( question_answers_req) => {
+                    res.send({
+                        keywords: question_keywords_req.data,
+                        question_text: question_text_req.data,
+                        answers: question_answers_req.data
+                    });
+                } ).catch( ( error ) => {
+                    res.send( error.response.status );
+                })
+            } ).catch( ( error ) => {
+                console.log( error );
+                res.send( error.response.status );
+            }  )
+        }).catch( ( error ) => {
+            console.log( error );
+            res.send( error.response.status );
+        })
+    } ).catch( e => { console.log( e ); res.send(e.response.status)})
+
+})
+
+router.post('/question_text' , ( req , res ) => {
+    const question_title = req.body['question_title'];
+    const query = 'SELECT question_text FROM question WHERE question_title = ?';
+    connection.query(query , [question_title] , ( error , result) => {
+        if ( error ) throw error;
+        res.send(result);
+    })
+})
+
+router.post('/question_keywords' , ( req , res ) => {
+    const question_title = req.body[ 'question_title' ];
+    const query = `SELECT k.keyword_title FROM (SELECT h.question_id,h.keyword_id FROM 
+                   (SELECT question_id FROM question WHERE question_title = ?) AS i
+                   INNER JOIN has_keyword AS h
+                   ON h.question_id = i.question_id) AS ii
+                   INNER JOIN keyword AS k
+                   on k.keyword_id = ii.keyword_id`
+    connection.query( query , [ question_title ] , ( error , results ) => {
+        if ( error ) throw error;
+        res.send( results );
+    })
+})
+
+router.post('/question_answers' , ( req , res ) => {
+    const question_title = req.body[ 'question_title' ];
+    const query = `SELECT a.answer_text,a.username,a.date_posted FROM answer AS a
+                   INNER JOIN (SELECT question_id FROM question WHERE question_title = ?) AS q
+                   ON a.question_id = q.question_id`
+    connection.query( query , [ question_title ] , ( error , results ) => {
+        if ( error ) throw error;
+        res.send( results );
+    })
+})
 
 router.get( '/whoami' ,
     passport.authenticate( 'token' , { session: false } ), ( req , res , next ) => {

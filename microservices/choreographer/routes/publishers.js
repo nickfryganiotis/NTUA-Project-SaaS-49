@@ -17,8 +17,10 @@ console.log('connected to redis');
 
 pool.hset('subscribers','sign-up', JSON.stringify([]) , () => {});
 pool.hset('subscribers' , 'create-question', JSON.stringify([]) , () => {});
+pool.hset('subscribers' , 'answer-question', JSON.stringify([]) , () => {});
 pool.hset('bus' , 'sign-up' , JSON.stringify([]) , () => {});
 pool.hset('bus' , 'create-question' , JSON.stringify([]) , () => {});
+pool.hset('bus' , 'answer-question' , JSON.stringify([]) , () => {});
 
 
 router.post('/sign_up' , ( req , res) => {
@@ -86,7 +88,40 @@ router.post('/create_question' , ( req , res ) => {
             })
         })
     })
+})
 
+router.post('/answer_question' , ( req , res) => {
+    const event = req.body;
+    let currentMessages;
+    let newMessage = {};
+
+    pool.hget('bus' , 'answer-question' , async ( error , data ) => {
+        currentMessages = JSON.parse( data );
+        newMessage = {
+            'id': currentMessages.length + 1,
+            event,
+            'timestamp': Date.now()
+        };
+        currentMessages.push(newMessage);
+        pool.hset('bus' , 'answer-question' , JSON.stringify(currentMessages) , () => {
+            pool.hget('subscribers' , 'answer-question' , ( error , data) => {
+                let subscribers = JSON.parse(data);
+                for ( let i = 0; i <subscribers.length; i++ ) {
+                    let options = {
+                        method: 'post',
+                        url: subscribers[i],
+                        data: newMessage
+                    };
+                    axios(options).then(resp => {
+                        console.log(subscribers[i],resp.data);
+                    }).catch(e => {
+                        console.log(subscribers[i],{'status':'lost connection'});
+                    });
+                    res.send({'status':'ok'})
+                }
+            })
+        })
+    })
 })
 
 module.exports = router;
