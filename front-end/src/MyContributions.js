@@ -14,7 +14,7 @@ export default function MyContributions() {
       let t = JSON.parse(localStorage.getItem("ask-me-anything-token"));
       axios({
         method: "post",
-        url: "http://localhost:5001/my_contributions_per_day",
+        url: "https://ask-me-anything-49-analytics.herokuapp.com/my_contributions_per_day",
         data: t,
       })
         .then((res) => {setContributions(res.data);console.log(res.data)})

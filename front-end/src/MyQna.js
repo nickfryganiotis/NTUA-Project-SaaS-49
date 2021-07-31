@@ -37,12 +37,12 @@ export default function MyQna() {
     let api_options = [
       axios({
         method: "post",
-        url: "http://localhost:5001/my_questions",
+        url: "https://ask-me-anything-49-analytics.herokuapp.com/my_questions",
         data: t,
       }),
       axios({
         method: "post",
-        url: "http://localhost:5001/my_answers",
+        url: "https://ask-me-anything-49-analytics.herokuapp.com/my_answers",
         data: t,
       }),
     ];

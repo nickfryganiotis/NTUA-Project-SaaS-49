@@ -18,7 +18,7 @@ export default function SignIn() {
     console.log(credentials);
     const auth_options = {
       method: "post",
-      url: "http://localhost:5000/sign_in",
+      url: "https://ask-me-anything-49-auth.herokuapp.com/sign_in",
       data: credentials,
     };
     axios(auth_options)

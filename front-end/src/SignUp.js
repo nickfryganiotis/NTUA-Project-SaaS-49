@@ -18,7 +18,7 @@ export default function SignUp() {
         delete x['re-password']
         let signup_options = {
           method: "post",
-          url: "http://localhost:5000/sign_up",
+          url: "https://ask-me-anything-49-auth.herokuapp.com/sign_up",
           data: x
         }
         axios(signup_options).then((res) =>  {

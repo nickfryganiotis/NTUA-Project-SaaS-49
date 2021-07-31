@@ -17,7 +17,7 @@ export default function AskForm() {
 
     let keyword_options = {
       method:"post",
-      url: "http://localhost:5003/get_keywords",
+      url: "https://ask-me-anything-49-question.herokuapp.com/get_keywords",
       data: t
     }
     axios(keyword_options)
@@ -63,7 +63,7 @@ export default function AskForm() {
     setQuestion(z)
     let ask_options = {
       method: "post",
-      url: "http://localhost:5003/create_question",
+      url: "https://ask-me-anything-49-question.herokuapp.com/create_question",
       data: {...z, token : token["token"]},
     };
     console.log(z)

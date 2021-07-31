@@ -15,7 +15,7 @@ export default function QuestionsPerKeyword(){
         let t = JSON.parse(localStorage.getItem("ask-me-anything-token"));
         let qpk_options = {
           method: "post",
-          url: "http://localhost:5001/questions_per_keyword",
+          url: "https://ask-me-anything-49-analytics.herokuapp.com/questions_per_keyword",
           data: t,
         };
         axios(qpk_options)

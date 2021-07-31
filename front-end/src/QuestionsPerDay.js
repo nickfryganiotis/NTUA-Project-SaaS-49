@@ -15,7 +15,7 @@ export default function QuestionsPerDay(){
         let t = JSON.parse(localStorage.getItem("ask-me-anything-token"));
         let qpd_options = {
             method: "post",
-            url: "http://localhost:5001/questions_per_day",
+            url: "https://ask-me-anything-49-analytics.herokuapp.com/questions_per_day",
             data: t,
           };
         axios(qpd_options)

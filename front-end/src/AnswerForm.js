@@ -20,7 +20,7 @@ export default function AnswerForm() {
     setToken(t);
     let question_options = {
       method: "post",
-      url: "http://localhost:5003/get_questions",
+      url: "https://ask-me-anything-49-question.herokuapp.com/get_questions",
       data: t,
     };
     axios(question_options)
@@ -33,7 +33,7 @@ export default function AnswerForm() {
     if (selectedQuestion !== null) {
       let answer_options = {
         method: "post",
-        url: "http://localhost:5003/question_info",
+        url: "https://ask-me-anything-49-question.herokuapp.com/question_info",
         data: { ...selectedQuestion, token: token["token"] },
       };
       axios(answer_options)
@@ -57,7 +57,7 @@ export default function AnswerForm() {
     e.preventDefault();
     let answering_options = {
       method: "post",
-      url: "http://localhost:5005/answer_question",
+      url: "https://ask-me-anything-49-answer.herokuapp.com/answer_question",
       data: {
         ...answer,
         token: token.token,
