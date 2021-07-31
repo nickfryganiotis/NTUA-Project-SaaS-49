@@ -91,7 +91,7 @@ router.post('/question_answers' , ( req , res ) => {
 
 router.post('/question_text' , ( req , res ) => {
     const question_title = req.body['question_title'];
-    const query = 'SELECT question_text FROM question WHERE question_title = ?';
+    const query = 'SELECT question_text, username, date_asked FROM question WHERE question_title = ?';
     connection.query(query , [question_title] , ( error , result) => {
         if ( error ) throw error;
         res.send(result);
