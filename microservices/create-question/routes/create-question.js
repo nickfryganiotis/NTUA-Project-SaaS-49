@@ -76,6 +76,7 @@ router.post( '/create_question' , ( req , res ) => {
             axios( keyword_options ).then( ( new_keyword_ids ) => {
                 const merged_keyword_ids = question_parameters[ 'oldKeywords' ].concat(
                     new_keyword_ids.data[ 'new_keyword_ids' ] );
+                console.log(question_parameters["oldKeywords"], new_keyword_ids.data["new_keyword_ids"]);
                 let has_keyword_options;
                 if ( merged_keyword_ids.length > 0) {
                     has_keyword_options =  {
@@ -86,6 +87,7 @@ router.post( '/create_question' , ( req , res ) => {
                             keyword_ids: merged_keyword_ids
                         }
                     };
+                    console.log("\nAUTA EINAI TA OPTIONS\n", has_keyword_options);
                 }
                 else {
                     has_keyword_options = {

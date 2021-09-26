@@ -20,11 +20,11 @@ export default function AnswerForm() {
     setToken(t);
     let question_options = {
       method: "post",
-      url: "http://localhost:5005/get_questions",
+      url: "http://localhost:5005/get_question_titles",
       data: t,
     };
     axios(question_options)
-      .then((res) => setQuestions(res.data.questions))
+      .then((res) => {setQuestions(res.data.question_titles); console.log(res.data)})
       .catch((error) => alert("Something went wrong..."));
   }
   }, []);
@@ -39,6 +39,7 @@ export default function AnswerForm() {
       axios(answer_options)
         .then((res) => {
           setQuestionData(res.data.question_text);
+          console.log(res.data);
           setKeywords(res.data.keywords);
           setAnswers(res.data.answers);
           console.log(res.data);

@@ -49,8 +49,9 @@ export default function MyQna() {
 
     axios.all(api_options).then(
       axios.spread((obj1, obj2) => {
-        setMyQuestions(obj1.data);
-        setMyAnswers(obj2.data);
+        setMyQuestions(obj1.data.questions);
+        setMyAnswers(obj2.data.answers);
+        console.log(obj1, obj2);
       })
     );
     }

@@ -60,10 +60,10 @@ pool.hget('subscribers','answer-question' , async ( error , data ) => {
 } )
 
 router.post('/update_answers' , ( req , res ) => {
-    const username = req.body['username'];
-    const question_title = req.body['question_title'];
-    const answer_text = req.body['answer_text'];
-    const query = 'INSERT INTO answer (?,?,?)'
+    const username = req.body.event['username'];
+    const question_title = req.body.event['question_title'];
+    const answer_text = req.body.event['answer_text'];
+    const query = 'INSERT INTO answer (username, question_title, answer_text) VALUES (?,?,?)'
     connection.query( query , [username,question_title,answer_text] , ( error , results ) => {
         if ( error ) throw error;
         res.send( results );
@@ -77,10 +77,10 @@ router.post('/my_answers' , ( req , res ) => {
         }
     }).then( (in_res) => {
         const username = in_res.data['user']['username'];
-        const query = 'SELECT question_title,answer_text FROM answer WHERE username = ?';
+        const query = 'SELECT question_title,answer_text,date_posted FROM answer WHERE username = ?';
         connection.query( query , [username] , ( error , results ) => {
             if ( error ) throw error;
-            res.send({'keywords':results})
+            res.send({'answers':results})
         })
     }).catch( e => {
         console.log(e);

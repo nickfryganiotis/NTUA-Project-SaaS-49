@@ -117,8 +117,8 @@ router.post('/answer_question' , ( req , res) => {
                     }).catch(e => {
                         console.log(subscribers[i],{'status':'lost connection'});
                     });
-                    res.send({'status':'ok'})
                 }
+                    res.send({'status':'ok'})
             })
         })
     })

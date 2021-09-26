@@ -1,5 +1,5 @@
-CREATE SCHEMA IF NOT EXISTS QuestionsInfo;
-USE QuestionsInfo;
+CREATE SCHEMA IF NOT EXISTS QuestionInfoDb;
+USE QuestionInfoDb;
 
 CREATE TABLE question (
 	question_id INT AUTO_INCREMENT,

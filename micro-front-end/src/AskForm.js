@@ -55,6 +55,7 @@ export default function AskForm() {
         newKeywordNames.push(keyword["label"])
       } else {
         oldKeywordIds.push(keyword["value"])
+        console.log(keyword)
       }
     });
     let z = {...question}

@@ -81,7 +81,7 @@ pool.hget('subscribers','answer-question' , async ( error , data ) => {
 
 router.post( '/update_question' , ( req , res ) => {
 
-        const question_parameters = req.body;
+        const question_parameters = req.body.event;
         const question_options = {
             method: "post",
             url: "http://localhost:5006/add_question",
@@ -96,25 +96,51 @@ router.post( '/update_question' , ( req , res ) => {
         };
 
         axios( question_options ).then( ( question_id ) => {
-            const keyword_options = {
-                method: "post",
-                url: "http://localhost:5006/add_keywords",
+            if(question_parameters['newKeywords'].length > 0) {
+                keyword_options = {
+                    method: "post",
+                    url: "http://localhost:5006/add_keywords",
 
-                data: {
-                    new_keywords: question_parameters[ 'newKeywords' ]
-                }
-            };
+
+                    data: {
+                        new_keywords: question_parameters[ 'newKeywords' ]
+                    }
+                };
+            }
+            else {
+                keyword_options = {
+                    method: "post",
+                    url: "http://localhost:5006/nothing",
+
+
+                    data: {
+                        ups: ["ups"]
+                    }
+                };
+            }
             axios( keyword_options ).then( ( new_keyword_ids ) => {
                 const merged_keyword_ids = question_parameters[ 'oldKeywords' ].concat(
                     new_keyword_ids.data[ 'new_keyword_ids' ] );
-                const has_keyword_options = {
-                    method: "post",
-                    url: "http://localhost:5006/has_keywords",
-                    data: {
-                        question_id: question_id.data[ 'question_id' ],
-                        keyword_ids: merged_keyword_ids
+                    let has_keyword_options;
+                    if ( merged_keyword_ids.length > 0) {
+                        has_keyword_options =  {
+                            method: "post",
+                            url: "http://localhost:5006/has_keywords",
+                            data: {
+                                question_id: question_id.data[ 'question_id' ],
+                                keyword_ids: merged_keyword_ids
+                            }
+                        };
                     }
-                };
+                    else {
+                        has_keyword_options = {
+                            method: "post",
+                            url: "http://localhost:5006/nothing",
+                            data: {
+                                ups: ["ups"]
+                            }
+                        };
+                    }
                 axios( has_keyword_options ).then( ( add_relation ) => {
                     res.send(add_relation.data);
 
@@ -143,7 +169,7 @@ router.post( '/add_keywords' , ( req , res ) => {
     const new_keywords = req.body[ 'new_keywords' ];
     const query = "INSERT INTO keyword (keyword_title) VALUES ?";
     connection.query( query , [ new_keywords.map( ( el ) => [ el ] ) ] , ( error , result ) => {
-        if ( error ) throw error;
+        if ( error ) console.log(error);
         /* MySql returns the id of the first inserted keyword. We can use this formulation in order to present the
         new keyword ids: map -> (el + fs_id) -> {0,...,new_keywords.length-1}
          */
@@ -160,18 +186,18 @@ router.post( '/has_keywords' , ( req , res ) => {
     const keywords = req.body[ 'keyword_ids' ];
     const query = "INSERT INTO has_keyword (question_id,keyword_id) VALUES ?"
     connection.query( query , [ keywords.map( (el) => [ question_id , el ] ) ] , ( error , result ) => {
-        if ( error ) throw error;
+        if ( error ) console.log(error);
         res.send( result );
     } )
 })
 
 router.post('/update_answers' , ( req , res ) => {
-    const username = req.body['username'];
-    const question_title = req.body['question_title'];
-    const answer_text = req.body['answer_text'];
-    const query = 'INSERT INTO answer (?,?,?)'
+    const username = req.body.event['username'];
+    const question_title = req.body.event['question_title'];
+    const answer_text = req.body.event['answer_text'];
+    const query = 'INSERT INTO answer(username,question_title,answer_text) VALUES (?,?,?)'
     connection.query( query , [username,question_title,answer_text] , ( error , results ) => {
-        if ( error ) throw error;
+        if ( error ) console.log(error);
         res.send( results );
     })
 })
@@ -226,9 +252,9 @@ router.post( '/question_info' , ( req , res ) => {
 
 router.post('/question_text' , ( req , res ) => {
     const question_title = req.body['question_title'];
-    const query = 'SELECT question_text FROM question WHERE question_title = ?';
+    const query = 'SELECT question_text, date_asked, username FROM question WHERE question_title = ?';
     connection.query(query , [question_title] , ( error , result) => {
-        if ( error ) throw error;
+        if ( error ) console.log(error);
         res.send(result);
     })
 })
@@ -242,18 +268,19 @@ router.post('/question_keywords' , ( req , res ) => {
                    INNER JOIN keyword AS k
                    on k.keyword_id = ii.keyword_id`
     connection.query( query , [ question_title ] , ( error , results ) => {
-        if ( error ) throw error;
+        if ( error ) console.log(error);
         res.send( results );
     })
 })
 
 router.post('/question_answers' , ( req , res ) => {
     const question_title = req.body[ 'question_title' ];
-    const query = `SELECT a.answer_text,a.username,a.date_posted FROM answer AS a
+    /*const query = `SELECT a.answer_text,a.username,a.date_posted,a.question_title FROM answer AS a
                    INNER JOIN (SELECT question_id FROM question WHERE question_title = ?) AS q
-                   ON a.question_id = q.question_id`
+                   ON a.question_id = q.question_id`*/
+    const query = `SELECT answer_text, username, date_posted FROM answer WHERE question_title = ? `
     connection.query( query , [ question_title ] , ( error , results ) => {
-        if ( error ) throw error;
+        if ( error ) console.log(error);
         res.send( results );
     })
 })
@@ -269,6 +296,10 @@ router.get( '/whoami' ,
     }
 );
 
+router.post('/nothing' , ( req , res ) => {
+    console.log(req.body);
+    res.send({'new_keyword_ids' : []});
+})
 
 
 

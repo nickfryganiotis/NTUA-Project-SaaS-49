@@ -28,7 +28,7 @@ console.log('connected to redis');
 pool.hget('subscribers','create-question' , async ( error , data ) => {
     let currentSubscribers = JSON.parse( data );
     let alreadySubscribed = false;
-    let myAddress = 'http://localhost:5009/update_questions'
+    let myAddress = 'http://localhost:5009/update_question'
     for( let i = 0; i < currentSubscribers.length; i++ ) {
         if( currentSubscribers[i] == myAddress ) {
             alreadySubscribed = true;
@@ -46,10 +46,10 @@ pool.hget('subscribers','create-question' , async ( error , data ) => {
 } )
 router.post( '/update_question' , ( req , res ) => {
 
-    const question_parameters = req.body;
+    const question_parameters = req.body.event;
     const query = 'INSERT INTO question (question_title,question_text) VALUES (?,?)';
-    connection.query('query' , [question_parameters['question_title' , question_parameters['question_text']]] ,( error , results) => {
-        if (error) throw error;
+    connection.query(query , [question_parameters['question_title'] , question_parameters['question_text']] ,( error , results) => {
+        if (error) console.log(error);
         res.send(results);
     } )
 
@@ -60,7 +60,7 @@ router.post('/questions_per_day' , ( req , res) => {
                    FROM question q
                    GROUP BY date(q.date_asked)`;
     connection.query( query , ( error , results ) => {
-        if ( error ) throw error;
+        if ( error ) console.log(error);
         res.send( results );
     } )
 })

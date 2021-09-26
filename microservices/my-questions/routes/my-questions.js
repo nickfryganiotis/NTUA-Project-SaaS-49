@@ -62,11 +62,11 @@ pool.hget('subscribers','create-question' , async ( error , data ) => {
 } )
 
 router.post('/update_my_questions' , ( req , res ) => {
-    const username = req.body['username'];
-    const question_title = req.body['question_title'];
-    const query = 'INSERT INTO user_question (?,?)';
+    const username = req.body.event['username'];
+    const question_title = req.body.event['question_title'];
+    const query = 'INSERT INTO user_question (username, question_title) VALUES (?,?)';
     connection.query( query , [username,question_title] , ( error , results ) => {
-        if (error) throw error;
+        if (error) console.log(error);
         res.send( results);
     });
 })
@@ -77,10 +77,10 @@ router.post('/my_questions' , ( req , res ) => {
             Authorization: 'Bearer ' + token //the token is a variable which holds the token
         }
     }).then( (in_res) => {
-        const query = 'SELECT question_title FROM user_question where username = ?';
-        connection.query( query , [in_res.user.username],( error , results ) => {
-            if ( error ) throw error;
-            res.send({'question_titles':results})
+        const query = 'SELECT question_title, date_asked FROM user_question where username = ?';
+        connection.query( query , [in_res.data.user.username],( error , results ) => {
+            if ( error ) console.log(error);
+            res.send({'questions':results})
         })
     }).catch( e => {
         console.log(e);

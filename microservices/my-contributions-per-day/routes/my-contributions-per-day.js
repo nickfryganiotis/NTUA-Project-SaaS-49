@@ -80,23 +80,23 @@ pool.hget('subscribers','answer-question' , async ( error , data ) => {
 } )
 
 router.post('/update_questions' , ( req , res ) => {
-    const username = req.body['username'];
-    const question_title = req.body['question_title'];
-    const question_text = req.body['question_text'];
+    const username = req.body.event['username'];
+    const question_title = req.body.event['question_title'];
+    const question_text = req.body.event['question_text'];
     const query = 'INSERT INTO question (question_title,question_text,username) VALUES (?,?,?)';
     connection.query( query , [question_title,question_text,username] , ( error , result) => {
-        if ( error ) throw error;
+        if ( error ) console.log(error);
         res.send( result );
     })
 })
 
 router.post('/update_answers' , ( req , res ) => {
-    const username = req.body['username'];
-    const answer_text = req.body['answer_text'];
-    const question_title = req.body['question_title'];
+    const username = req.body.event['username'];
+    const answer_text = req.body.event['answer_text'];
+    const question_title = req.body.event['question_title'];
     const query = 'INSERT INTO answer (question_title,answer_text,username) VALUES (?,?,?)';
     connection.query(query , [question_title,answer_text,username] , ( error , result ) => {
-        if ( error ) throw error;
+        if ( error ) console.log(error);
         res.send( result );
     })
 })

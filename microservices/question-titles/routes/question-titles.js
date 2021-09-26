@@ -61,10 +61,10 @@ pool.hget('subscribers','create-question' , async ( error , data ) => {
 } )
 
 router.post('/update_question_titles' , ( req , res ) => {
-    const question_title = req.body['question_title'];
+    const question_title = req.body.event['question_title'];
     const query = 'INSERT INTO question_titles (question_title) VALUES (?)';
     connection.query(query , [ question_title ] , ( error, results) => {
-        if ( error ) throw error;
+        if ( error ) console.log(error);
         res.send( results );
     })
 })
@@ -77,7 +77,7 @@ router.post('/get_question_titles' , ( req , res) => {
     }).then( (in_res) => {
         const query = 'SELECT question_title FROM question_titles';
         connection.query( query , ( error , results ) => {
-            if ( error ) throw error;
+            if ( error ) console.log(error);
             res.send({'question_titles':results})
         })
     }).catch( e => {

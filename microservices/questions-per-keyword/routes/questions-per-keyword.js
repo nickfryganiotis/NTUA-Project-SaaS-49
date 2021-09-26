@@ -28,7 +28,7 @@ console.log('connected to redis');
 pool.hget('subscribers','create-question' , async ( error , data ) => {
     let currentSubscribers = JSON.parse( data );
     let alreadySubscribed = false;
-    let myAddress = 'http://localhost:5008/update_questions'
+    let myAddress = 'http://localhost:5008/update_question'
     for( let i = 0; i < currentSubscribers.length; i++ ) {
         if( currentSubscribers[i] == myAddress ) {
             alreadySubscribed = true;
@@ -46,7 +46,7 @@ pool.hget('subscribers','create-question' , async ( error , data ) => {
 } )
 router.post( '/update_question' , ( req , res ) => {
 
-    const question_parameters = req.body;
+    const question_parameters = req.body.event;
     const question_options = {
         method: "post",
         url: "http://localhost:5008/add_question",

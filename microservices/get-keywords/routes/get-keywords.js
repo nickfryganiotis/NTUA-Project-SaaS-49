@@ -6,6 +6,7 @@ const passport = require( 'passport' );
 const jwt = require( 'jsonwebtoken' );
 const JWTStrategy = require( 'passport-jwt' ).Strategy;
 const ExtractJWT = require( 'passport-jwt' ).ExtractJwt;
+const e = require('express');
 
 const connection = mysql.createConnection( {
     host: 'localhost',
@@ -60,12 +61,18 @@ pool.hget('subscribers','create-question' , async ( error , data ) => {
 } )
 
 router.post('/update_keywords' , ( req , res ) => {
-    const keywords = req.body['newKeywords'];
-    const query = 'INSERT INTO keyword (keyword_title) VALUES (?)'
-    connection.query( query , keywords.map( e => [e] ) , ( error , results ) => {
+    const keywords = req.body.event['newKeywords'];
+    if (keywords.length > 0){
+    const query = 'INSERT INTO keyword (keyword_title) VALUES ?'
+    connection.query( query , [keywords.map( e => [e] )] , ( error , results ) => {
         if ( error ) throw error;
         res.send( results );
     })
+    }
+    else{
+        res.send("No new keywords.")
+    }
+
 })
 
 router.post('/get_keywords' , ( req , res ) => {
@@ -74,7 +81,7 @@ router.post('/get_keywords' , ( req , res ) => {
             Authorization: 'Bearer ' + token //the token is a variable which holds the token
         }
     }).then( (in_res) => {
-        const query = 'SELECT keyword_title FROM keyword';
+        const query = 'SELECT keyword_id,keyword_title FROM keyword';
         connection.query( query , ( error , results ) => {
             if ( error ) throw error;
             res.send({'keywords':results})

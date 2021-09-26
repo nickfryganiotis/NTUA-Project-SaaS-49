@@ -56,7 +56,7 @@ router.post('/answer_question' , (req,res) => {
                 }
             };
             axios(choreographer_options).then(( choreographer_req => {
-                res.send(answer_res.data);
+                res.send(choreographer_req.data);
             })).catch( e => {
                 console.log(e);
                 res.send(e.response.status)
