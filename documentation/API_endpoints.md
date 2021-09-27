@@ -58,6 +58,22 @@ HTTP_AUTH_HEADERS: BEARER_TOKEN
     * Content: `{'keywords':[KEYWORDS_RELATED_TO_QUESTION_TITILE] , 'question_text': QUESTION_TEXT , 'answers': [ ANSWERS_TO_QUESTION ] }`
 * Notes: In case of an unathorized user, a 401 UNATHORIZED code is returned.
 
+### Get questions
+* URL: `/get_questions`
+* Method: `POST`
+* Requires Authentication: **YES**
+* Data Params: In the body of the POST request, fill in the following fields of the following json:
+```javascript
+{
+  token: "Your token"
+}
+```
+* Success Response: 
+    * Code: `200`
+    * Content: `{[ {'question_title' : QUESTION_TITLE_1 } , ... , { 'question_title' : QUESTION_TITLE_N } ] }`
+* Notes: In case of an unathorized user, a 401 UNATHORIZED code is returned.
+
+
 ### Get keywords
 * URL: `/get_keywords`
 * Method: `POST`
@@ -70,6 +86,54 @@ HTTP_AUTH_HEADERS: BEARER_TOKEN
 ```
 * Success Response: 
     * Code: `200`
-    * Content: `{[ {'keyword_id' : KEYWORD_1 } , ... , { 'keyword' : KEYWORD_N } ] }`
+    * Content: `{[ {'keyword_title' : KEYWORD_TITLE_1 } , ... , { 'keyword_title' : KEYWORD_TITLE_N } ] }`
 * Notes: In case of an unathorized user, a 401 UNATHORIZED code is returned.
+
+### Answer question
+* URL: `/answer-question/`
+* Method: `POST`
+* Requires Authentication: **YES**
+* Data Params: In the body of the POST request, fill in the following fields of the following json:
+```javascript
+{
+  'token' : "Your token"
+  'question_title': QUESTION_TITLE,
+  'answer_text': ANSWER_TEXT
+}
+```
+* Success Response: 
+    * Code: `200`
+    * Content: `{ 'answer_id' : 'YOUR_ANSWER_ID' }`
+* Notes: In case of an unathorized user, a 401 UNATHORIZED code is returned.
+
+### Get questions per keyword
+* URL: `/questions_per_keyword`
+* Method: `POST`
+* Requires Authentication: **NO**
+* Data Params: In the body of the POST request, fill in the following fields of the following json:
+```javascript
+{
+  token: "Your token"
+}
+```
+* Success Response: 
+    * Code: `200`
+    * Content: `{ { 'keyword_title' : KEYWORD_TITLE_1 , question_titles: [QUESTION_TITLES_RELATED_TO_KW_1]} , ... , { 'keyword_title' : KEYWORD_TITLE_N , question_titles: [QUESTION_TITLES_RELATED_TO_KW_N]} }`
+* Notes: In case of an unathorized user, a 401 UNATHORIZED code is returned.
+
+### Get questions per day
+* URL: `/questions_per_day`
+* Method: `POST`
+* Requires Authentication: **NO**
+* Data Params: In the body of the POST request, fill in the following fields of the following json:
+```javascript
+{
+  token: "Your token"
+}
+```
+* Success Response: 
+    * Code: `200`
+    * Content: `{ { 'day' : DAY_1 , question_titles: [QUESTION_TITLES_RELATED_TO_DAY_1]} , ... , { 'day' : DAY_N , question_titles: [QUESTION_TITLES_RELATED_TO_DAY_N]} }`
+* Notes: In case of an unathorized user, a 401 UNATHORIZED code is returned.
+
 
