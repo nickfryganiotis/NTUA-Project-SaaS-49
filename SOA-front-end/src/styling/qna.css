@@ -1,0 +1,29 @@
+.qna-wrapper{
+    display:flex;
+    justify-content: space-evenly;
+    margin-top: 100px;
+}
+
+.q-container{
+    border-radius: 5px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 16px 20px 0 rgba(0,0,0,0.19);
+    overflow-y:auto;
+    height:500px;
+}
+
+blockquote{
+    font-style: italic;
+}
+
+.qna-header{
+    text-align: center;
+    font-weight: bold;
+    font-size: 2em;
+}
+
+.small-bq{
+    font-style:italic;
+    font-size:0.9em;
+}
